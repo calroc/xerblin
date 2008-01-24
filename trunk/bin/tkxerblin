@@ -1,0 +1,86 @@
+#!/usr/bin/env python
+"""
+    Copyright (C) 2004, 2005, 2006, 2007 Simon Forman
+
+    This file is part of Xerblin.
+
+    Xerblin is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+"""
+import sys
+import os
+import getopt
+import Tkinter
+
+
+from xerblin.lib import words
+from xerblin import Object
+from xerblin.messaging import ListModel
+from xerblin.util.controller import XerblinController
+
+
+def runStartScript(interp, start_script):
+    #Make sure it's a file..
+    if not os.path.isfile(start_script):
+        print >> sys.stderr, "Start script '%s' not a file." % start_script
+        return
+
+    #Get the script's contents.
+    script = open(start_script).read()
+
+    #Try interpreting the script.
+    try:
+        interp.interpret(script)
+
+    except:
+        print >> sys.stderr, "Start script '%s' failed." % start_script
+
+
+def getOpts(args):
+    '''
+    Get our options.
+    '''
+    opts = dict(getopt.getopt(args[1:], 's:')[0])
+    start_script = opts.get('-s')
+    return start_script
+
+
+def main(args=None):
+    '''
+    '''
+    if args is None:
+        args = sys.argv
+
+    start_script = getOpts(args)
+
+    I = Object(
+        name='Xerblin',
+        dictionary=words,
+        stack=ListModel()
+        )
+
+    T = Tkinter.Tk()
+    T.title('Xerblin')
+    XC = XerblinController(I, T)
+    XC.pack(expand=True, fill=Tkinter.BOTH)
+
+    if start_script:
+        runStartScript(I, start_script)
+
+    Tkinter.mainloop()
+
+
+if __name__ == '__main__':
+    main()

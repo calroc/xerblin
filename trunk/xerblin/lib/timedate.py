@@ -1,0 +1,21 @@
+from time import time, ctime
+from xerblin import ExecutableWord
+
+
+class timedate(ExecutableWord):
+    '''
+    Put a string representing the current time and date onto the stack.
+    '''
+    def execute(self, stack):
+        stack.append(ctime())
+
+
+class Time(ExecutableWord):
+    '''
+    Put the current time in seconds onto the stack.
+    '''
+
+    __name__ = 'time'
+
+    def execute(self, stack):
+        stack.append(time())

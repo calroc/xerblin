@@ -1,0 +1,9 @@
+include README MANIFEST MANIFEST.in
+include setup.py
+include src/*.py
+include src/lib/*.py
+include src/lib/widgets/*.py
+include src/scripts/*
+include src/test/*.py
+include src/util/*.py
+include docs/*
