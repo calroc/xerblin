@@ -8,4 +8,4 @@ class rot(StackLen(3), ExecutableWord):
     '''
 
     def execute(self, stack):
-        stack.append(stack.pop(-3))
+        stack.insert(0, stack.pop(2))

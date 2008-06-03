@@ -1,5 +1,10 @@
 from Tkinter import *
 from tkFont import Font
+from xerblin import Object
+from xerblin.lib.constant import Constant
+from xerblin.lib.widgets.geometrybinder import GeometryBinder
+from xerblin.lib.widgets.widgetwrapper import setGeometry
+from xerblin.util.backtime import attemptBackup
 
 
 class HistoryList(list):
@@ -66,25 +71,30 @@ class XerblinController(Frame):
     def interpret(self, event=None):
         self.interpreter.interpret(self.getCommandLine())
 
+        o = self.interpreter.dictionary.pop('XerblinController')
+        try:
+            attemptBackup(self.interpreter)
+        finally:
+            self.interpreter.dictionary['XerblinController'] = o
+
     def pushString(self, event=None):
-        self.interpreter.stack.append(self.getCommandLine())
+        self.interpreter.stack.insert(0, self.getCommandLine())
 
     def lookup(self, event=None):
         s = self.getCommandLine()
 
-        if s:
-            s = s.split()
-        else:
+        if not s:
             return
 
-        words = [
-            word
-            for word in map(self.interpreter.dictionary.get, s)
-            if word is not None
-            ]
+        s = s.split()
+
+        try:
+            words = [self.interpreter.dictionary[w] for w in s]
+        except KeyError:
+            print 'unknown word:', repr(w)
+            return
                      
-        if words:
-            self.interpreter.stack.extend(words)
+        self.interpreter.stack[0:0] = words
 
     def opendoc(self, event=None):
         self.interpreter.stack.append(self.getCommandLine())
@@ -135,8 +145,22 @@ class XerblinController(Frame):
         self._commandline.focus_set()
 
 
+def makeXerblinController(I, T):
+    T.title('Xerblin')
+    XC = XerblinController(I, T)
+    XC.pack(expand=True, fill=BOTH)
+    gb = GeometryBinder(T)
+    D = dict(
+##        controller=Constant('controller', XC),
+        setGeometry=setGeometry(T),
+        )
+    D.update(gb.dict_of_vars)
+    o = Object(name='XerblinController', dictionary=D)
+    o._gb = gb
+    I.dictionary['XerblinController'] = o
+
+
 if __name__ == '__main__':
-    from xerblin import Object
     from xerblin.lib import words
     from xerblin.messaging import ListModel
 

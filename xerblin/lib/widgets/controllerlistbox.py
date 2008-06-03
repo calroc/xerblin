@@ -59,32 +59,26 @@ class ControllerListbox(DraggyListbox):
         return self
 
     def dnd_enter(self, source, event):
-##        print 'dnd_enter', self, source, event
         pass
 
     def dnd_motion(self, source, event):
+        I = self.nearest(event.y_root - self.winfo_rooty())
         if self._dragIndex >= 0:
             self.delete(self._dragIndex)
-        I = self.nearest(event.y_root - self.winfo_rooty())
         self._dragIndex = I
         self.insert(I, '---')
-##        print 'dnd_motion'#, self, source, event
-        pass
 
     def dnd_leave(self, source, event):
         if self._dragIndex >= 0:
             self.delete(self._dragIndex)
             self._dragIndex = -1
-##        print 'dnd_leave', self, source, event
-        pass
 
     def dnd_commit(self, source, event):
-        if self._dragIndex >= 0:
-            self.delete(self._dragIndex)
+        i = self._dragIndex
+
+        if i >= 0:
+            self.delete(i)
             self._dragIndex = -1
-##        print 'dnd_commit', repr(self), source, event
-        y = event.y_root - self.winfo_rooty()
-        i = self.nearest(y)
 
         try:
             if self is source.widget:

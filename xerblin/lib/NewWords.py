@@ -26,7 +26,7 @@ class NewBranchWord(ExecutableWord):
     Put a new branch word on the stack.
     '''
     def execute(self, stack):
-        stack.append(BranchExecutableWord())
+        stack.insert(0, BranchExecutableWord())
 
 
 class NewLoopWord(ExecutableWord):
@@ -34,7 +34,7 @@ class NewLoopWord(ExecutableWord):
     Put a new loop word on the stack.
     '''
     def execute(self, stack):
-        stack.append(LoopExecutableWord())
+        stack.insert(0, LoopExecutableWord())
 
 
 class NewSeqWord(ExecutableWord):
@@ -42,4 +42,4 @@ class NewSeqWord(ExecutableWord):
     Put a new sequential word on the stack.
     '''
     def execute(self, stack):
-        stack.append(SequentialExecutableWord())
+        stack.insert(0, SequentialExecutableWord())

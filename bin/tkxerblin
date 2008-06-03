@@ -23,12 +23,13 @@ import sys
 import os
 import getopt
 import Tkinter
+T = Tkinter.Tk()
 
 
 from xerblin.lib import words
 from xerblin import Object
 from xerblin.messaging import ListModel
-from xerblin.util.controller import XerblinController
+from xerblin.util.controller import makeXerblinController
 
 
 def runStartScript(interp, start_script):
@@ -71,10 +72,7 @@ def main(args=None):
         stack=ListModel()
         )
 
-    T = Tkinter.Tk()
-    T.title('Xerblin')
-    XC = XerblinController(I, T)
-    XC.pack(expand=True, fill=Tkinter.BOTH)
+    XC = makeXerblinController(I, T)
 
     if start_script:
         runStartScript(I, start_script)

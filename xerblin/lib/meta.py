@@ -10,4 +10,4 @@ class meta(ExecutableWord):
     def execute(self, stack):
         n = ListModel(stack)
         del stack[:]
-        stack.append(n)
+        stack.insert(0, n)

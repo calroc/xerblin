@@ -8,4 +8,4 @@ class over(StackLen(2), ExecutableWord):
     '''
 
     def execute(self, stack):
-        stack.append(stack[-2])
+        stack.insert(0, stack[1])

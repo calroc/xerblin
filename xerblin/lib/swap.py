@@ -8,5 +8,5 @@ class swap(StackLen(2), ExecutableWord):
     '''
 
     def execute(self, stack):
-        second, tos = stack[-2:]
-        stack[-2:] = tos, second
+        second, tos = stack[:2]
+        stack[:2] = tos, second

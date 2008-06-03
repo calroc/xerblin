@@ -7,7 +7,7 @@ class timedate(ExecutableWord):
     Put a string representing the current time and date onto the stack.
     '''
     def execute(self, stack):
-        stack.append(ctime())
+        stack.insert(0, ctime())
 
 
 class Time(ExecutableWord):
@@ -18,4 +18,4 @@ class Time(ExecutableWord):
     __name__ = 'time'
 
     def execute(self, stack):
-        stack.append(time())
+        stack.insert(0, time())

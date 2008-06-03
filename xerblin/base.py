@@ -93,19 +93,19 @@ class SimpleInterpreter:
 
             if word.startswith('"') and word.endswith('"') and \
                len(word) > 1:
-                self.stack.append(word[1:-1])
+                self.stack.insert(0, word[1:-1])
                 continue
 
             #first, try making an integer..
             try:
                 i = int(word)
-                self.stack.append(i)
+                self.stack.insert(0, i)
             except ValueError:
 
                 #if that didn't work, try making a float..
                 try:
                     f = float(word)
-                    self.stack.append(f)
+                    self.stack.insert(0, f)
                 except ValueError:
 
                     #not a float or integer, eh? Let's try executing it..
@@ -237,6 +237,9 @@ class ExecutableWord(object):
         """
         pass
 
+    def __repr__(self):
+        return "Word %s" % self.name
+
 
 Nop = ExecutableWord('Nop')
 Nop.__doc__ = 'No Operation. Default "do nothing" word.'
@@ -275,6 +278,8 @@ class BranchExecutableWord(ExecutableWord):
     """
     """
 
+    __name__ = "branch"
+
     def __init__(self, name=None):
         """
         Branch  - Do one thing or the other, depending on the results of a test.
@@ -297,18 +302,18 @@ class BranchExecutableWord(ExecutableWord):
         """
 
         #Get the boolean flag value.
-        flag = stack.pop()
+        flag = stack.pop(0)
 
         #If true (i.e. flag != 0) execute word1..
         if flag:
-            BranchExecutableWord(stack, self.word1)
+            BracketedExecuteWord(stack, self.word1)
 
         #if false (i.e. flag == 0) execute word0.
         else:
-            BranchExecutableWord(stack, self.word0)
+            BracketedExecuteWord(stack, self.word0)
 
     def __repr__(self):
-        return '<BranchWord("%s", True: "%s", False: "%s")>' % (
+        return '%s & %s %s' % (
             self.name, self.word1.name, self.word0.name
             )
 
@@ -327,10 +332,22 @@ class SequentialExecutableWord(ExecutableWord, ListModel, FSMapSeqWordMixin):
 
     """
 
+    __name__ = "seq"
+
     def __init__(self, name=None, initlist=[]):
         list.__init__(self, initlist)
         # ListModel doesn't have its own __init__().
         ExecutableWord.__init__(self, name)
+
+    def __getstate__(self):
+        return self.name, list(self)
+
+    def __setstate__(self, state):
+        name, items = state
+        self.name = name
+##        list.__setslice__(self, 0, 0, items) # Huh!?  w/o this unpickling
+        # creates the seq words just fine, with it they each have 2x their
+        # words.  I.e. "seq = 0 1 2 0 1 2"  (not "= 0 1 2")
 
     def execute(self, stack):
         """
@@ -365,7 +382,7 @@ class SequentialExecutableWord(ExecutableWord, ListModel, FSMapSeqWordMixin):
         super(SequentialExecutableWord, self).extend(other)
 
     def __repr__(self):
-        return '<SeqWord("%s", %s)>' % (self.name, repr([n.name for n in self]))
+        return '%s = %s' % (self.name, ' '.join(n.name for n in self))
 
 
 ####################################
@@ -374,6 +391,8 @@ class SequentialExecutableWord(ExecutableWord, ListModel, FSMapSeqWordMixin):
 class LoopExecutableWord(SequentialExecutableWord):
     """
     """
+
+    __name__ = "loop"
 
     def _stackok(self, stack):
         assert stack, 'stack too small, needs 1 thing'
@@ -395,7 +414,7 @@ class LoopExecutableWord(SequentialExecutableWord):
             if __debug__:
                 self._stackok(stack) # Re-check the stack on each iteration.
 
-            flag = stack.pop()
+            flag = stack.pop(0)
 
             if flag:
                 SequentialExecutableWord.execute(self, stack)
@@ -408,7 +427,7 @@ class LoopExecutableWord(SequentialExecutableWord):
             raise OverflowError, (self, 'recursion limit exceeded.')
 
     def __repr__(self):
-        return '<LoopWord("%s", %s)>' % (self.name, repr([n.name for n in self]))
+        return '%s @ %s' % (self.name, ' '.join(n.name for n in self))
 
 
 ####################################
@@ -418,6 +437,8 @@ class ParallelExecutableWord(ExecutableWord):
     """
     This is just a preliminary first approximation.
     """
+
+    __name__ = "fork"
 
     def __init__(self, name=None, word0=Nop, word1=Nop):
         """
@@ -439,12 +460,17 @@ class ParallelExecutableWord(ExecutableWord):
         """
         raise NotImplementedError, self
 
+    def __repr__(self):
+        return '%s | %s %s' % (
+            self.name, self.word1.name, self.word0.name
+            )
+
 
 class warranty(ExecutableWord):
     """
                             NO WARRANTY
 
-  11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
 FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
 OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
 PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
@@ -454,7 +480,7 @@ TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE
 PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
 REPAIR OR CORRECTION.
 
-  12. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
 WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
 REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
 INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING
@@ -478,8 +504,13 @@ class SelfWord(ExecutableWord):
         self.interpreter = interpreter
 
     def execute(self, stack):
-        stack.append(self.interpreter)
+        stack.insert(0, self.interpreter)
 
+    def __repr__(self):
+        return '%s word - %s ' % (
+            self.name,
+            getattr(self.interpreter, 'name', self.interpreter)
+            )
 
 class Interpreter(SimpleInterpreter):
     __doc__ = SimpleInterpreter.__doc__
@@ -511,22 +542,28 @@ class DefaultExecute(ExecutableWord):
             the stack, the inner Object gets those args as a list on it's
             stack.
 
-            Caller: [a, b, c, "some commands"]
+            Caller: ["some commands", a, b, c]
 
             Caller calls Object.execute() which appends caller's stack
             onto callee's stack, like so:
 
-                [x, y, z, [a, b, c, "some commands"]] <=:Callee's stack.
+                [["some commands", a, b, c], x, y, z] <=:Callee's stack.
 
                 DefaultExecute.execute() pops the message/command off of
                 the caller's embedded stack
 
-                [x, y, z, [a, b, c]] : <= "some commands"
+                [[a, b, c], x, y, z] : <= "some commands"
         '''
 
-        message = stack[-1].pop()
+        message = stack[0].pop(0)
 
         self.thing.interpret(message)
+
+    def __repr__(self):
+        return '%s word - %s ' % (
+            self.name,
+            getattr(self.thing, 'name', self.thing)
+            )
 
 
 class Object(Interpreter, ExecutableWord, FSMapObjectMixin):
@@ -545,8 +582,11 @@ class Object(Interpreter, ExecutableWord, FSMapObjectMixin):
             execute = self.dictionary['execute']
         except KeyError:
             return
-        self.stack.append(stack)
+        self.stack.insert(0, stack)
         self.execute_word(execute)
+
+    def __repr__(self):
+        return 'Object %s' % self.name
 
 
 if __name__ == '__main__':

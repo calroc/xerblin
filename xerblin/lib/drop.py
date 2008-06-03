@@ -8,4 +8,4 @@ class drop(StackLen(1), ExecutableWord):
     '''
 
     def execute(self, stack):
-        stack.pop()
+        del stack[0]

@@ -17,7 +17,7 @@ class Constant(ExecutableWord):
         self.value = value
 
     def execute(self, stack):
-        stack.append(self.value)
+        stack.insert(0, self.value)
 
 
 class constant(StackLen(2), StackType(0, basestring), ExecutableWord):
@@ -25,5 +25,5 @@ class constant(StackLen(2), StackType(0, basestring), ExecutableWord):
     Create a named constant with a given value.
     '''
     def execute(self, stack):
-        new_constant = Constant(stack[-1], stack[-2])
-        stack[-2:] = [new_constant]
+        new_constant = Constant(stack[0], stack[1])
+        stack[:2] = [new_constant]

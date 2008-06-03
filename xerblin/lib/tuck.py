@@ -9,4 +9,4 @@ class tuck(StackLen(2), ExecutableWord):
     '''
 
     def execute(self, stack):
-        stack.insert(-2, stack[-1])
+        stack.insert(2, stack[0])

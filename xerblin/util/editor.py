@@ -3,7 +3,7 @@ from Tkinter import Text, Toplevel, Frame, END
 
 class SaveyText(Text):
 
-    _saveDelay = 1000
+    _saveDelay = 400
 
     def __init__(self, P, master=None,  **kw):
         Text.__init__(self, master, **kw)
@@ -35,6 +35,10 @@ class SaveyText(Text):
         self._cancelSave()
         self._saveAfter(self._saveDelay)
 
+    def forceSave(self):
+        self._cancelSave()
+        self._saveFunc()
+
     def _saveFunc(self):
         self._save = None
         text = self.get('0.0', 'end -1 chars')
@@ -50,7 +54,6 @@ class SaveyText(Text):
         if self._save:
             self.after_cancel(self._save)
             self._save = None
-
 
 
 class Editor(Frame):
@@ -79,6 +82,12 @@ def editParagraphModel(model):
     T.title('Editing %s' % (model.name,))
     E = Editor(model, T)
     E.pack(expand=True, fill='both')
+
+    def destroy(event=None):
+        E.T.forceSave()
+        T.destroy()
+
+    T.protocol("WM_DELETE_WINDOW", destroy)
 
 
 if __name__ == '__main__':

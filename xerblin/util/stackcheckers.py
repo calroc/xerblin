@@ -2,6 +2,10 @@
 ###    Stack Checker Mixins
 #############################################
 
+
+NUMBER_TYPES = int, float, long
+
+
 class _urMixin(object):
     def _stackok(self, stack):
         pass
@@ -34,8 +38,6 @@ def StackType(index, type_, cache={}):
     '''
     '''
 
-    index = -index - 1 # TOS is stack[-1], etc...
-
     sig = (index, type_)
 
     C = cache.get(sig)
@@ -55,8 +57,6 @@ def StackType(index, type_, cache={}):
 def StackHasAttr(index, attr, cache={}):
 
     assert isinstance(attr, basestring)
-
-    index = -index - 1 # TOS is stack[-1], etc...
 
     sig = (index, attr)
 
@@ -83,5 +83,5 @@ if __name__ == '__main__':
         pass
 
     s = S()
-    s._stackok(['1', 2])
+    s._stackok([2, '1'])
     s._stackok([1, 2])

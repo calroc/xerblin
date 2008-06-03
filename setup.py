@@ -4,16 +4,18 @@ from distutils.core import setup
 
 setup(
     name='Xerblin',
-    version='0.9.0',
+    version='0.9.4',
     description='Xerblin System',
     author='Simon Forman',
     author_email='forman.simon@gmail.com',
     license='GPL',
-    url='http://calroc.home.mindspring.com/xerblin',
+    url='http://code.google.com/p/xerblin/',
     packages = [
         "xerblin",
         "xerblin.lib",
         "xerblin.lib.widgets",
+        "xerblin.lib.pygoo",
+        "xerblin.lib.animation",
         "xerblin.util",
         ],
     scripts=[
