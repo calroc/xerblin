@@ -1,0 +1,105 @@
+How to use the new MakeWords little language to create new words.
+
+First get the name of the MakeWords library onto the Stack, either by
+copying it there with the mouse or using the chomp word from a command
+line or script.
+
+The name of the library is: xerblin.lib.makewords  Once it's on the
+stack, use the loadlibrary word to load the library.  This will load
+these three words into your Dictionary:
+
+MakeWords.Scan MakeWords.Parse MakeWords
+
+You use these three words in sequence to convert a description of the
+words you want into the actual new words.
+
+You write a description of the words and put it onto the Stack.  Then you
+execute MakeWords.Scan to convert the string description into a list of
+"tokens".  Next, you execute MakeWords.Parse to parse the tokens into an
+Abstract Syntax Tree that represents the words you're about to create.
+Finally, you execute MakeWords to turn the Abstract Syntax Tree into
+actual Xerblin words and Inscribe them into your Dictionary.
+
+For example, let's say you wanted a word that would execute all three of
+those make-words words for you in the proper order.  Call it
+MakeWords.allatonce, the description would look like this:
+
+*MakeWords.allatonce = MakeWords.Scan MakeWords.Parse MakeWords
+
+To use it you would select the text (in a Xerblin TextViewer) with the
+left button and also click the right to copy the description onto the
+Stack and then right click on the three words in order (MakeWords.Scan
+MakeWords.Parse MakeWords) after which the new MakeWords.allatonce word
+would be ready in the Dictionary to use.  The asterix means that this
+word should be put in the Dictionary.  The equals sign means that you
+want a Seqential word.  You can also use @ for Loop words and & for
+Branch words.  Parallel words currently aren't implemented, and Branch
+words must have exactly two child words after the ampersand.
+
+Here's another example.  This description will create a GCD word that can
+compute the Greatest Common Denominator of two integers.  To use it, get
+any two integers onto the stack and then execute GCD.  Here's the
+description:
+
+    j @ tuck mod dup
+    *GCD = dup j drop
+
+That's it.  Copy that to the stack with a left-right interclick and then
+right click on the MakeWords.allatonce word.
+
+You now have a new word called GCD in your Dictionary.  If you put two
+integers onto the stack and right click on GCD it will compute the
+greatest common denominator.
+
+
+The language is roughly like this:
+
+    [*] newword op kids
+
+where the presence of the optional asterix indictates that the new word
+should be Incribed in the Dictionary for use by the End User (as opposed
+to being part of the definition of some other word, such as the j word in
+the GCD example.)
+
+newword will be the name of the new word.  If a word already exists in
+the Dictionary under that name it will be replaced, but any ComboWords
+made with the old version will continue to use that.
+
+The op can be one of '=', '@', or '&', for Seqential, Loop, and Branch
+words respectively.  Sequencial and Loop words can have any number of
+kids (well, more than zero, otherwise what's the point?) but Branch words
+must have exactly two words, the first for True and the second for False.
+If you don't want the Branch word to do something on one of the branches
+then use the Nop (no-operation, "do nothing") word, like so:
+
+    foo.on.True & foo Nop
+
+The kids can be any words in the Dictionary or string, integer or float
+literals.  The strings are any non-'"' between two '"'s (I tried
+monkeying around with the RE to try and get escaped quotes but I'm a
+monkey and haven't figured it out just yet..)  
+
+Literals are turned into constant words that push the literal values onto
+the stack at run-time.  So you could, for example, use the following word
+to compute the surface area of a circle, given its radius on the Stack:
+
+    *circle.area = dup 2 3.1415926535897931 mul mul mul
+
+or:
+
+    *circle.area = dup 6.2831853071795862 mul mul
+
+
+Or let's say you have a file named wow.pickle in your home directory that
+you like to save your current pickle in.  Here's a useful word to do
+that:
+
+    *autopickle = pickleme "/home/sforman/wow.pickle" saveas
+
+This autopickle word pickles the current Interpreter state (the Stack and
+Dictionary) to a pickle string on the Stack, then it puts the filename of
+your favorite pickle file onto the Stack, then it save the pickle to the
+pickle file with the saveas word (saveas will prompt you to prevent
+accidentally overwriting a file.)
+
+

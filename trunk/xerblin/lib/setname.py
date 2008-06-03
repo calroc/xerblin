@@ -8,6 +8,6 @@ class setname(StackLen(2), StackType(0, basestring), ExecutableWord):
     of the object to the value of the string.
     '''
     def execute(self, stack):
-        obj, name = stack[-2:]
+        name, obj = stack[:2]
         setattr(obj, 'name', name)
-        stack.pop()
+        stack.pop(0)

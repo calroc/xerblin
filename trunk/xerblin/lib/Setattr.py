@@ -10,6 +10,6 @@ class Setattr(StackLen(3), StackType(1, basestring), ExecutableWord):
     __name__ = 'setattr'
 
     def execute(self, stack):
-        obj, name, value = stack[-3:]
+        obj, name, value = stack[2::-1]
         setattr(obj, name, value)
-        del stack[-3:]
+        del stack[:3]

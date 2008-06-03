@@ -40,7 +40,7 @@ submodules = (
     if fn not in exclude and (fn.endswith('.py') or isdir(join(p, fn)))
     )
 # The only actual 'export' of this (xerblin.lib) module: xerblin.lib.words
-words = {}
+W = {}
 
 
 def loadModuleWords(M, W):
@@ -88,11 +88,14 @@ for submodule in submodules:
             try:
                 submodule = submodule[:-3]
 
-                f, fn, description = find_module(submodule, path)
+                loadPackageWords(submodule, W)
 
-                Mod = load_module(submodule, f, fn, description)
-
-                loadModuleWords(Mod, words)
+##                f, fn, description = find_module(submodule, path)
+##
+##                submodule = 'xerblin.lib.' + submodule
+##                Mod = load_module(submodule, f, fn, description)
+##
+##                loadModuleWords(Mod, W)
 
             except ImportError:
                 pass
@@ -100,4 +103,6 @@ for submodule in submodules:
         else:
             if submodule == '.svn':
                 continue
-            loadPackageWords(submodule, words)
+            loadPackageWords(submodule, W)
+
+words = W

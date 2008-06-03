@@ -1,7 +1,6 @@
-from stackwidgets import (
-    stackviewer,
+from words import (
+    getstack,
     listviewer,
-    stackcontroller,
-    listcontroller,
+    textviewer,
+    s2t,
     )
-from textviewer import textviewer, s2t

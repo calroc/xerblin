@@ -17,19 +17,19 @@ from xerblin.util.stackcheckers import StackLen, StackType
 class NewBranchWord(ExecutableWord):
     '''Put a new branch word on the stack.'''
     def execute(self, stack):
-        stack.append(BranchExecutableWord())
+        stack.insert(0, BranchExecutableWord())
 
 
 class NewLoopWord(ExecutableWord):
     '''Put a new loop word on the stack.'''
     def execute(self, stack):
-        stack.append(LoopExecutableWord())
+        stack.insert(0, LoopExecutableWord())
 
 
 class NewSeqWord(ExecutableWord):
     '''Put a new sequential word on the stack.'''
     def execute(self, stack):
-        stack.append(SequentialExecutableWord())
+        stack.insert(0, SequentialExecutableWord())
 
 
 class makemacrosequence(
@@ -69,10 +69,10 @@ Once you have the list of words and the name on the stack you can click
 
     def _stackok(self, stack):
         super(makemacrosequence, self)._stackok(stack)
-        self._all_ExecutableWords(stack[-2])
+        self._all_ExecutableWords(stack[1])
 
     def execute(self, stack):
-        words, name = stack[-2:]
+        name, words = stack[:2]
         s = SequentialExecutableWord(name)
         s.extend(words)
-        stack[-2:] = [s]
+        stack[:2] = [s]

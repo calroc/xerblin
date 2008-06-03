@@ -13,6 +13,6 @@ class lookup(
     '''
     def execute(self, stack):
         '''Look up a word in the dictionary. Returns None if not found.'''
-        interp, name = stack[-2:]
+        name, interp = stack[:2]
         word = interp.dictionary.get(name)
-        stack[-2:] = [word]
+        stack[:2] = [word]

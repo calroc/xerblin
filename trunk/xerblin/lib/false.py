@@ -6,4 +6,4 @@ class false(ExecutableWord):
     Push False onto the stack.
     '''
     def execute(self, stack):
-        stack.append(False)
+        stack.insert(0, False)

@@ -12,12 +12,11 @@ class Inscribe(
     with the same name.
     '''
     def execute(self, stack):
-        word, interpreter = stack[-2:]
+        interpreter, word = stack[:2]
         name = word.name
 
         if name in interpreter.dictionary:
             print '%s already exists in Dictionary.' % name
         else:
             interpreter.dictionary[name] = word
-            del stack[-2:]
-            stack.append(name)
+            stack[:2] = [name]

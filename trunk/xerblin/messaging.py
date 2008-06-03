@@ -47,6 +47,18 @@ class Viewer(object):
         return True
 
 
+class RootViewer(Viewer):
+    def handle(self, message):
+        model, method, args = (
+            message.model,
+            message.method_name,
+            message.args
+            )
+        t, i = model.__class__.__name__, id(model)
+        print '%s %i . %s %r' % (t, i, method, args)
+        return Viewer.handle(self, message)
+
+
 class NotifyMessage:
 
     def __init__(self, model, method_name, args):
@@ -68,12 +80,13 @@ class ModelMixin:
 
     def notify(self, method_name, args):
         message = NotifyMessage(self, method_name, args)
-        self_id = '<%s: %s => %s>' % (
-            self.__class__.__name__,
-            id(self),
-            repr(self)
-            )
-        log.debug('notify %s', str((self_id, method_name, args)))
+        if __debug__:
+            self_id = '<%s: %s => %s>' % (
+                self.__class__.__name__,
+                id(self),
+                repr(self)
+                )
+            log.debug('notify %s', str((self_id, method_name, args)))
         self.root.handle(message)
 
 

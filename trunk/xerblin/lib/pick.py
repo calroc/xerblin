@@ -10,8 +10,8 @@ class pick(StackLen(1), StackType(0, int), ExecutableWord):
 
     def _stackok(self, stack):
         super(pick, self)._stackok(stack)
-        assert 0 <= stack[-1] < (len(stack) - 1)
+        assert 0 <= stack[0] < (len(stack) - 1)
 
     def execute(self, stack):
-        n = int(stack.pop())
-        stack.append(stack[-(n + 1)])
+        n = stack[0] + 1
+        stack[0] = stack[n]

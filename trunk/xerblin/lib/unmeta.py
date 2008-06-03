@@ -12,7 +12,7 @@ class unmeta(StackLen(1), ExecutableWord):
         super(unmeta, self)._stackok(stack)
 
         try:
-            for n in stack[-1]: break
+            for n in stack[0]: break
 
         #The following except block catches the TypeError raised if N can't
         #be iterated on, i.e. is not a sequence.
@@ -25,6 +25,9 @@ class unmeta(StackLen(1), ExecutableWord):
                 raise e
 
     def execute(self, stack):
-        m, s = stack[:-1], stack[-1]
-        m.extend(s)
-        stack[:] = m
+        s = stack.pop(0)
+        try:
+            stack[0:0] = s
+        except:
+            stack.insert(0, s)
+            raise

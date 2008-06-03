@@ -8,4 +8,4 @@ class dup(StackLen(1), ExecutableWord):
     '''
 
     def execute(self, stack):
-        stack.append(stack[-1]) #faster than k += [k[-1]]?
+        stack.insert(0, stack[0])

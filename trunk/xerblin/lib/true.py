@@ -6,4 +6,4 @@ class true(ExecutableWord):
     Push True onto the stack.
     '''
     def execute(self, stack):
-        stack.append(True)
+        stack.insert(0, True)

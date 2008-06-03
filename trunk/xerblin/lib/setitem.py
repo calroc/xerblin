@@ -10,6 +10,6 @@ class setitem(StackLen(3), ExecutableWord):
     key and value are consumed, but object remains on the stack.
     '''
     def execute(self, stack):
-        obj, key, value = stack[-3:]
+        obj, key, value = stack[2::-1]
         obj.__setitem__(key, value)
-        del stack[-2:]
+        del stack[:2]

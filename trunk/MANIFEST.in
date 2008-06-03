@@ -1,9 +1,8 @@
 include README MANIFEST MANIFEST.in
 include setup.py
-include src/*.py
-include src/lib/*.py
-include src/lib/widgets/*.py
-include src/scripts/*
-include src/test/*.py
-include src/util/*.py
+include xerblin/*.py
+include xerblin/lib/*.py
+include xerblin/lib/widgets/*.py
+include xerblin/test/*.py
+include xerblin/util/*.py
 include docs/*

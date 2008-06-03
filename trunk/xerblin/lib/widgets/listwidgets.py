@@ -1,10 +1,11 @@
 from Tkinter import Toplevel, BOTH
 
-from xerblin import ExecutableWord, SimpleInterpreter
 from xerblin.messaging import ModelMixin, Viewer, ListModel
-from xerblin.util.stackcheckers import StackLen, StackType
-
-from controllerlistbox import DraggyListbox, ControllerListbox
+from xerblin.lib.widgets.controllerlistbox import (
+    DraggyListbox,
+    ControllerListbox,
+    )
+from xerblin.lib.widgets.widgetwrapper import MakeViewer
 
 
 type_descriptors = {
@@ -19,10 +20,10 @@ type_descriptors = {
 other = 'other:'
 
 
+_longest = max(map(len, type_descriptors.values() + [other]))
+
 #Create our format string.
-fmt = '%%-%is %%s' % max(
-    len(n) for n in (type_descriptors.values() + [other])
-    )
+fmt = '%%-%is %%s' % _longest
 
 
 def _format(n):
@@ -33,6 +34,7 @@ def _format(n):
     if not type_name:
         try:
             type_name = n.__class__.__name__
+            type_name = type_name[:_longest - 3] + '..:'
         except AttributeError:
             type_name = other
     return fmt % (type_name, n)
@@ -98,8 +100,9 @@ class SequenceViewer(AbstractSequenceViewer):
 
     def __init__(self, model, tkparent=None, parent=None, **kw):
         kw['items'] = model
+        kw.setdefault('width', 55)
         self.lb = DraggyListbox(tkparent, **kw)
-        self.lb.pack(expand=True, fill='both')
+        self.lb.pack(expand=True, fill=BOTH)
         AbstractSequenceViewer.__init__(self, model)
         if parent is None:
             parent = ModelMixin.root
@@ -127,96 +130,30 @@ class SequenceViewer(AbstractSequenceViewer):
         #And put in the new.
         self.lb.insert(0, *stack)
 
+    def __getstate__(self):
+        master = self.lb.winfo_toplevel()
+        model = self.model
+        return model, master
+
+    def __setstate__(self, state):
+        model, master = state
+        self.__init__(model, master)
+
 
 class SequenceController(SequenceViewer):
 
     def __init__(self, model, tkparent=None, **kw):
         kw['items'] = model
+        kw.setdefault('width', 55)
         self.lb = ControllerListbox(tkparent, **kw)
         self.lb.pack(expand=True, fill='both')
         AbstractSequenceViewer.__init__(self, model)
         ModelMixin.root.addChild(self)
 
 
-class StackController(SequenceViewer):
-
-    def __init__(self, stack, T, **kw):
-        self.stack = stack
-        kw['items'] = stack
-        self.lb = ControllerListbox(T, **kw)
-        self.lb.pack(expand=1, fill=BOTH)
-        AbstractSequenceViewer.__init__(self, stack)
-        ModelMixin.root.addChild(self)
-
-
 class ViewerMakerMixin:
+
     def _makeViewer(self, model, name, class_=SequenceViewer):
-        T = Toplevel()
-        T.title(name)
-        viewer = class_(model, T)
+        viewer = MakeViewer(name, model, class_)
         return viewer
-
-
-class stackviewer(
-    ViewerMakerMixin,
-    StackLen(1),
-    StackType(0, SimpleInterpreter),
-    ExecutableWord
-    ):
-    '''
-    Given an Interpreter on the stack open a SequenceViewer on its stack.
-    '''
-    def execute(self, stack):
-        interpreter = stack[-1]
-        model = interpreter.stack
-        name = "%s StackViewer" % (interpreter.name,)
-        stack[-1] = self._makeViewer(model, name)
-
-
-class stackcontroller(
-    ViewerMakerMixin,
-    StackLen(1),
-    StackType(0, SimpleInterpreter),
-    ExecutableWord
-    ):
-    '''
-    Given a ListModel on the stack open a ListViewer on it.
-    '''
-    def execute(self, stack):
-        interpreter = stack[-1]
-        model = interpreter.stack
-        name = "%s StackViewer" % (interpreter.name,)
-        stack[-1] = self._makeViewer(model, name, StackController)
-
-
-class listviewer(
-    ViewerMakerMixin,
-    StackLen(1),
-    StackType(0, ListModel),
-    ExecutableWord
-    ):
-    '''
-    Given a ListModel on the stack open a ListViewer on it.
-    '''
-    def execute(self, stack):
-        model = stack[-1]
-        name = "%s ListViewer" % (id(model),)
-        stack[-1] = self._makeViewer(model, name)
-
-
-class listcontroller(
-    ViewerMakerMixin,
-    StackLen(1),
-    StackType(0, ListModel),
-    ExecutableWord
-    ):
-    '''
-    Given a ListModel on the stack open a ListViewer on it.
-    '''
-    def execute(self, stack):
-        model = stack[-1]
-        name = "%s ListController" % (id(model),)
-        stack[-1] = self._makeViewer(model, name, SequenceController)
-
-
 
