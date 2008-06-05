@@ -1,0 +1,15 @@
+#summary What should Xerblin do on starting a fresh install?
+
+= What should Xerblin do on starting a fresh install? =
+
+Introducing Xerblin...
+
+How's this:
+
+  * Don't show the CLI at all at first, in fact, don't make it the center of the app.
+  * show a Text with the Guide in it,  mention the stack right away,  right click on some numbers,  add etc,   select and calc
+  * Then mention commands Words , plugin words, dict, Inscribe, Expunge,
+
+Guide should include words that bring up other docs.
+
+Make words is a plugin module.  Have tut that presents it as normal way to build new words,  then mention making them manually with lookup and drag-n-drop
