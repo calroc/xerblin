@@ -29,7 +29,6 @@ ExecutableWord - class of active objects.
 
 import sys    #we'll need sys for error reporting below.
 from xerblin.messaging import ListModel, log
-from xerblin.util.fsmap import FSMapObjectMixin, FSMapSeqWordMixin
 
 
 class SimpleInterpreter:
@@ -321,7 +320,7 @@ class BranchExecutableWord(ExecutableWord):
 ####################################
 #### Sequence Word              ####
 ####################################
-class SequentialExecutableWord(ExecutableWord, ListModel, FSMapSeqWordMixin):
+class SequentialExecutableWord(ExecutableWord, ListModel):
     """
     SequentialExecutableWord - This class executes
     its word0 and word1 one after the other. It doesn't
@@ -566,7 +565,7 @@ class DefaultExecute(ExecutableWord):
             )
 
 
-class Object(Interpreter, ExecutableWord, FSMapObjectMixin):
+class Object(Interpreter, ExecutableWord):
     """"
     An Object class created by merging an Interpreter and an ExecutableWord.
     """

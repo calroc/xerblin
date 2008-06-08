@@ -19,62 +19,36 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 """
-import sys
-import os
-import getopt
+import Tkinter
+T = Tkinter.Tk()
+T.title('Xerblin')
+Tkinter.Button(
+    T,
+    text='close (your place will be saved.)',
+    command=T.destroy
+    ).pack(
+        ipadx=123,
+        ipady=23,
+        )
+T.iconify()
+
 
 from xerblin.lib import words
 from xerblin import Object
-from xerblin.messaging import ListModel
+from xerblin.startup import startup_script
+from xerblin.lib.widgets.listwidgets import MakeViewer, SequenceController
 
 
-def runStartScript(interp, start_script):
-    #Make sure it's a file..
-    if not os.path.isfile(start_script):
-        print >> sys.stderr, "Start script '%s' not a file." % start_script
-        return
-
-    #Get the script's contents.
-    script = open(start_script).read()
-
-    #Try interpreting the script.
-    try:
-        interp.interpret(script)
-
-    except:
-        print >> sys.stderr, "Start script '%s' failed." % start_script
-
-
-    #Get the start script option if any
-    if start_script:
-        runStartScript(interp, start_script)
-
-
-def getOpts(args):
-    '''
-    Get our options.
-    '''
-    opts = dict(getopt.getopt(args[1:], 's:')[0])
-    start_script = opts.get('-s')
-    return start_script
-
-
-def main(args=None):
-    '''
-    '''
-    if args is None:
-        args = sys.argv
-
-    start_script = getOpts(args)
-
-    I = Object(dictionary=words, stack=ListModel())
-
-    if start_script:
-        runStartScript(I, start_script)
-
-    while True:
-        input_ = raw_input('xerblin: ')
-        I.interpret(input_)
+def main():
+    I = Object(name='Xerblin', dictionary=words)
+    stackviewer = MakeViewer(
+        "Xerblin Stack",
+        I.stack,
+        SequenceController,
+        )
+    I.dictionary['StackViewer'] = stackviewer
+    I.interpret(startup_script)
+    Tkinter.mainloop()
 
 
 if __name__ == '__main__':
