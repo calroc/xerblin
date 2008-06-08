@@ -2,15 +2,26 @@ from xerblin import ExecutableWord
 
 
 class Guide(ExecutableWord):
-    '''Xerblin User's Guide
+    '''Welcome
+    
+    This is the Guide.  Right-click on the word Guide to open a viewer onk the Guide.  Try it now.
 
-Xerblin is a simple system designed to allow normal people to
-get the most out of their computer with the least muss and fuss.
+    Right-clicking on a word that is also the name of a Xerblin Word will "Invoke" that word, causing it to perform its action.  You can tell if a word is a command because it will light up orange if you try right-clicking on it.  Further down in this document, you'll find a list of most of the basic words in the system.
 
-Once you know how to use Xerblin, you'll be able to use your computer
-much easier and get more use out of the incredible information appliance
-in front of you.
+    You can also Invoke numbers by right-clicking on them.  Invoking a number puts it onto the stack.  Try it with these numbers:
 
+        23      17
+
+    Once you have some numbers on the stack, you can Invoke math commands to use the interface like a calculator:  add  sub  (See below for more.)
+
+    You can also just Invoke the word calc but first you must put some text on the stack that describes an equation.  For example, let's say you wanted to know what three times twenty-seven was.  Select the folowing text, but before you let go of the mouse button press the right button once too.  (Then let go of all the buttons.)
+
+    3 * 27
+
+You should see the text of that equation on the stack.  Now Invoke calc
+
+
+[more guides here]
 
 Viewers..
 

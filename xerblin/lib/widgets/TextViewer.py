@@ -249,7 +249,7 @@ class TextViewerWidget(Text, mousebindingsmixin):
         #Turn on undo, but don't override a passed-in setting.
         kw.setdefault('undo', True)
 
-        kw.setdefault('bg', 'white')
+##        kw.setdefault('bg', 'white')
         kw.setdefault('wrap', 'word')
         kw.setdefault('font', 'arial 12')
 

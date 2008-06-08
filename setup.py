@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='Xerblin',
-    version='0.9.4',
+    version='0.9.3',
     description='Xerblin System',
     author='Simon Forman',
     author_email='forman.simon@gmail.com',
@@ -20,6 +20,5 @@ setup(
         ],
     scripts=[
         'bin/xerblin',
-        'bin/tkxerblin',
         ],
     )
