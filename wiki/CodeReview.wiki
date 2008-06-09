@@ -1,0 +1,25 @@
+#labels Phase-Implementation,Rietveld
+= Setting up Rietveld =
+
+
+
+
+
+
+
+
+
+
+
+== references ==
+http://googleappengine.blogspot.com/2008/05/open-source-app-rietveld-code-review.html
+Tuesday, May 6, 2008
+An Open Source App: Rietveld Code Review Tool
+Posted by Guido van Rossum, Software Engineer
+
+
+http://code.google.com/appengine/articles/rietveld.html
+An Open Source App: Rietveld Code Review Tool
+Guido van Rossum
+May 2008
+
