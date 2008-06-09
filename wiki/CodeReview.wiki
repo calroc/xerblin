@@ -1,8 +1,10 @@
 #labels Phase-Implementation,Rietveld
 = Setting up Rietveld =
 
-
-
+  # Install Google Apps SDK http://code.google.com/appengine/docs/gettingstarted/
+  # Get the Rietveld App source http://code.google.com/p/rietveld/source/checkout
+  # Set it up for Xerblin
+  # Deploy it to Google App
 
 
 
@@ -22,4 +24,3 @@ http://code.google.com/appengine/articles/rietveld.html
 An Open Source App: Rietveld Code Review Tool
 Guido van Rossum
 May 2008
-
