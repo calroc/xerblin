@@ -23,13 +23,14 @@ WIDGET_TYPES = dict(
     Canvas = Tkinter.Canvas,
     Checkbutton = Tkinter.Checkbutton,
     Entry = Tkinter.Entry,
-    Graph = GraphWrapper,
     Label = Tkinter.Label,
     Listbox = Tkinter.Listbox,
     Scale = Tkinter.Scale,
     Radiobutton = Tkinter.Radiobutton,
     Text = Tkinter.Text,
     )
+if GraphWrapper is not None:
+    WIDGET_TYPES['Graph'] = GraphWrapper
 
 
 def realize(master, obj, element, namespace):

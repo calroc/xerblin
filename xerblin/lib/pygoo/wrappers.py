@@ -1,36 +1,39 @@
 from Tkinter import Button
-from xerblin.lib.pygoo.tkplot import Graph
 
+try:
+    from xerblin.lib.pygoo.tkplot import Graph
+except ImportError:
+    GraphWrapper = None
+else:
+    class GraphWrapper(object):
 
-class GraphWrapper(object):
+        def __init__(self, frame, **options):
+            title = options.get('title', 'Graph')
+            xlabel = options.get('xlabel', 'X-Axis')
+            ylabel = options.get('ylabel', 'Y-Axis')
 
-    def __init__(self, frame, **options):
-        title = options.get('title', 'Graph')
-        xlabel = options.get('xlabel', 'X-Axis')
-        ylabel = options.get('ylabel', 'Y-Axis')
+            self.graph = Graph(frame, title, xlabel, ylabel)
+            self.grid = self.graph.tkcanvas.grid
 
-        self.graph = Graph(frame, title, xlabel, ylabel)
-        self.grid = self.graph.tkcanvas.grid
+        def setTitle(self, value):
+            self.graph.setTitle(value)
 
-    def setTitle(self, value):
-        self.graph.setTitle(value)
+        def setXLabel(self, value):
+            self.graph.setXLabel(value)
 
-    def setXLabel(self, value):
-        self.graph.setXLabel(value)
+        def setYLabel(self, value):
+            self.graph.setYLabel(value)
 
-    def setYLabel(self, value):
-        self.graph.setYLabel(value)
+        def setPlot(self, value):
+            self.graph.addPlot(*value)
 
-    def setPlot(self, value):
-        self.graph.addPlot(*value)
+        def clear(self):
+            self.graph.clearPlot()
 
-    def clear(self):
-        self.graph.clearPlot()
-
-    title = property(None, setTitle)
-    xlabel = property(None, setXLabel)
-    ylabel = property(None, setYLabel)
-    plot = property(clear, setPlot)
+        title = property(None, setTitle)
+        xlabel = property(None, setXLabel)
+        ylabel = property(None, setYLabel)
+        plot = property(clear, setPlot)
 
     
 
