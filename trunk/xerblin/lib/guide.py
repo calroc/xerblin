@@ -4,7 +4,7 @@ from xerblin import ExecutableWord
 class Guide(ExecutableWord):
     '''Welcome
     
-    This is the Guide.  Right-click on the word Guide to open a viewer onk the Guide.  Try it now.
+    This is the Guide.  You can close this TextViewer and then open it again later by right-clicking on the word Guide in any TextViewer.  You can also reopen this Guide by using the "Open Guide" button on the Xerblin controller widget.
 
     Right-clicking on a word that is also the name of a Xerblin Word will "Invoke" that word, causing it to perform its action.  You can tell if a word is a command because it will light up orange if you try right-clicking on it.  Further down in this document, you'll find a list of most of the basic words in the system.
 
@@ -18,8 +18,14 @@ class Guide(ExecutableWord):
 
     3 * 27
 
-You should see the text of that equation on the stack.  Now Invoke calc
+    You should see the text of that equation on the stack.  Now Invoke calc
 
+    Right-click on the word calc right here in the TextViewer.  You'll see that the string representation of this equation on the Stack has turned into the integer result, 81
+
+    You can also use several mathematical functions and constants, such as sin() and pi.  Try 2 * pi * pow(23, 2) to find the area of a circle of radius 23.
+
+
+TextViewerGuide
 
 [more guides here]
 
@@ -164,7 +170,7 @@ timedate
         stack.insert(0, self.__doc__)
 
 
-class TextViewerGuide(ExecutableWord):
+class TVGuide(ExecutableWord):
     '''TextViewer Guide
 
 In the Xerblin TextViewer the left mouse button functions very much like most people are used to: when pressed once it sets the insertion cursor and when pressed once and dragged it traces out a selection.
@@ -186,13 +192,12 @@ class GuideWords(ExecutableWord):
 ##
 
     '''
-
-        show = "show"
-        * Guide = show GuideViewer
-        * TextViewerGuide = show TextViewerGuideTextViewer
-        
-
+        * Guide = "show" GuideViewer
+        * TextViewerGuide = "show" TextViewerGuide
     '''
+##    '''
+##        * TextViewerGuide = "show" TextViewerGuide
+##    '''
     def execute(self, stack):
         stack.insert(0, self.__doc__)
 
