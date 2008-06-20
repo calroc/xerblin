@@ -24,7 +24,7 @@ T = Tkinter.Tk()
 T.title('Xerblin')
 Tkinter.Button(
     T,
-    text='close (your place will be saved.)',
+    text='Close Xerblin',
     command=T.destroy
     ).pack(
         ipadx=123,
@@ -39,6 +39,18 @@ from xerblin.startup import startup_script
 from xerblin.lib.widgets.listwidgets import MakeViewer, SequenceController
 
 
+def _makeGuideButton(I):
+    Tkinter.Button(
+        T,
+        text='Open Guide',
+        command=lambda n=None: I.interpret("Guide")
+        ).pack(
+            expand=True,
+            fill=Tkinter.X,
+            ipadx=23,
+            ipady=23,
+            )
+
 def main():
     I = Object(name='Xerblin', dictionary=words)
     stackviewer = MakeViewer(
@@ -48,6 +60,7 @@ def main():
         )
     I.dictionary['StackViewer'] = stackviewer
     I.interpret(startup_script)
+    _makeGuideButton(I)
     Tkinter.mainloop()
 
 
