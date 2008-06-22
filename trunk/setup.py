@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='Xerblin',
-    version='0.9.3',
+    version='0.9.5',
     description='Xerblin System',
     author='Simon Forman',
     author_email='forman.simon@gmail.com',
@@ -16,6 +16,7 @@ setup(
         "xerblin.lib.widgets",
         "xerblin.lib.pygoo",
         "xerblin.lib.animation",
+        "xerblin.lib.makewords",
         "xerblin.util",
         ],
     scripts=[
