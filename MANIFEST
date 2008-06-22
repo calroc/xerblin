@@ -1,8 +1,6 @@
-MANIFEST
 MANIFEST.in
 README
 setup.py
-bin/tkxerblin
 bin/xerblin
 docs/HowToMakeGreatestCommonDenominator.txt
 docs/TODO
@@ -10,9 +8,11 @@ docs/classes.txt
 docs/gpl.txt
 docs/newLL.text
 docs/usersguide.txt
+docs/xerblin
 xerblin/__init__.py
 xerblin/base.py
 xerblin/messaging.py
+xerblin/startup.py
 xerblin/lib/Getattr.py
 xerblin/lib/Inscribe.py
 xerblin/lib/NewWords.py
@@ -58,6 +58,9 @@ xerblin/lib/words.py
 xerblin/lib/animation/__init__.py
 xerblin/lib/animation/animation.py
 xerblin/lib/animation/words.py
+xerblin/lib/makewords/__init__.py
+xerblin/lib/makewords/parser.py
+xerblin/lib/makewords/words.py
 xerblin/lib/pygoo/__init__.py
 xerblin/lib/pygoo/pygoo.py
 xerblin/lib/pygoo/tkplot.py
@@ -72,14 +75,12 @@ xerblin/lib/widgets/widgetwrapper.py
 xerblin/lib/widgets/words.py
 xerblin/test/test.py
 xerblin/test/testControllerHistory.py
-xerblin/test/testFileMap.py
 xerblin/test/testMessaging.py
 xerblin/test/testText.py
 xerblin/util/__init__.py
 xerblin/util/backtime.py
 xerblin/util/controller.py
 xerblin/util/editor.py
-xerblin/util/fsmap.py
 xerblin/util/log.py
 xerblin/util/models.py
 xerblin/util/spark.py
