@@ -33,7 +33,23 @@ def InscribeDocumentationWords(interpreter):
     You can also use several mathematical functions and constants, such as sin() and pi.  Try 2 * pi * pow(23, 2) to find the area of a circle of radius 23.
 
 
-TextViewerGuide
+Summary of TextViewer commands (for more details right-click on TextViewerGuide here.)
+
+
+Invoke = Right
+Open = Right, Left
+Evoke = Right, Middle
+
+Select/Point = Left
+Copy = Left, Right
+Cut = Left, Middle
+
+Paste Selection = Middle
+Paste TOS = Middle, Left
+Pop/Paste TOS = Middle, Right
+
+(TOS means "Top Of Stack", i.e. the item on the top of the Stack.)
+
 
 [more guides here]
 
@@ -177,16 +193,52 @@ timedate
 
 
     "TextViewerGuide":
-    '''TextViewer Guide
+    '''TextViewerGuide
 
 In the Xerblin TextViewer the left mouse button functions very much like most people are used to: when pressed once it sets the insertion cursor and when pressed once and dragged it traces out a selection.
 
-In addition, you can place selections onto the stack by pressing either the middle or right buttons before releasing the left one. If you click the right button the selection will be copied onto the stack, if you click the middle button the selection will be cut from the current window onto the stack.
+In addition, you can place selections onto the stack by pressing either the middle or right buttons before releasing the left one.
 
-The middle button by itself pastes the current X selection into the current window at the mouse position, just like a normal X app. But if you click the left button before releasing the middle button you'll paste the item on the top of the stack into the current (Xerblin) window instead of the X selection. And if you click the right button you'll paste the item on the top of the stack into the current window and also remove that item from the stack (i.e. "pop").
+If you click the right button the selection will be copied onto the stack, if you click the middle button the selection will be cut from the current window onto the stack.
 
-The right button by itself will execute the command word under the mouse. However, if you click the left button before releasing the right button the system will instead execute the "opendoc" command word on the text under the mouse. And if instead you click the middle button before releasing the right button the system will attempt to "lookup" the command word under the mouse and, if found, place that ExecutableWord? onto the stack. 
-    '''
+The middle button by itself pastes the current selection into the current window at the mouse position. But if you click the left button before releasing the middle button you'll paste the item on the top of the stack into the current window instead of the selection. And if you click the right button you'll paste the item on the top of the stack into the current window and also remove that item from the stack (i.e. "pop").
+
+The right button by itself will invoke the command word under the mouse.  However, if you click the left button before releasing the right button the system will instead open a viewer on the command word under the mouse. And if instead you click the middle button before releasing the right button the system will attempt to evoke the command word under the mouse, that is, it will find the word in the Dictionary and place it onto the stack. 
+
+
+Summary
+
+Right Button First = Invoke
+    or then the Left Button = Open
+    or then the Middle Button = Evoke (put it on the Stack)
+
+Left Button First = Point (set the cursor location)
+    and drag = trace out a selection (text) or copy item (list)
+        then the Right Button = Copy selected text to Stack
+        or then the Middle Button = Cut selected text to Stack
+
+Middle Button = Paste current selection to pointer.
+    or then the Left Button = Copy item on Stack to pointer.
+    or then the Right Button = "Pop" item on Stack to pointer.
+
+
+
+Summary of Summary
+(TOS means "Top Of Stack", i.e. the item on the top of the Stack.)
+
+Invoke = Right
+Open = Right, Left
+Evoke = Right, Middle
+
+Select/Point = Left
+Copy = Left, Right
+Cut = Left, Middle
+
+Paste Selection = Middle
+Paste TOS = Middle, Left
+Pop/Paste TOS = Middle, Right
+
+'''
 
         }.iteritems():
         t = Text(name, text)
@@ -194,6 +246,8 @@ The right button by itself will execute the command word under the mouse. Howeve
         TV.execute(stack)
         T = stack[0]
         T.name = name
+        setGeometry = T.dictionary['setGeometry']
+        setGeometry.execute([[390, 123, 650, 720]])
         interpreter.dictionary[name] = T
 
 

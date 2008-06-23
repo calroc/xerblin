@@ -7,6 +7,14 @@
 
 startup_script = (
 
+    # Set the StackViewer in the corner.
+    ''' 480 364 0 0 meta''' # some coordinates. Now call setGeometry.
+    ''' self "StackViewer" lookup "setGeometry" lookup InvokeWord'''
+    
+
+    # Hide the TextViewerGuide.
+    ''' "hide" TextViewerGuide '''
+
     # Create the words in the built-in word "GuideWords".
     '''self GuideWords makewords drop '''
 
