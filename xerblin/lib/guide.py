@@ -1,8 +1,16 @@
 from xerblin import ExecutableWord
+from xerblin.util.models import Text
+from xerblin.lib.widgets.words import textviewer
+
+TV = textviewer()
 
 
-class Guide(ExecutableWord):
-    '''Welcome
+def InscribeDocumentationWords(interpreter):
+    for name, text in {
+
+    "Guide":
+
+        '''Welcome
     
     This is the Guide.  You can close this TextViewer and then open it again later by right-clicking on the word Guide in any TextViewer.  You can also reopen this Guide by using the "Open Guide" button on the Xerblin controller widget.
 
@@ -165,12 +173,10 @@ Time Words
 time
 timedate
 
-    '''
-    def execute(self, stack):
-        stack.insert(0, self.__doc__)
+    ''',
 
 
-class TVGuide(ExecutableWord):
+    "TextViewerGuide":
     '''TextViewer Guide
 
 In the Xerblin TextViewer the left mouse button functions very much like most people are used to: when pressed once it sets the insertion cursor and when pressed once and dragged it traces out a selection.
@@ -181,8 +187,14 @@ The middle button by itself pastes the current X selection into the current wind
 
 The right button by itself will execute the command word under the mouse. However, if you click the left button before releasing the right button the system will instead execute the "opendoc" command word on the text under the mouse. And if instead you click the middle button before releasing the right button the system will attempt to "lookup" the command word under the mouse and, if found, place that ExecutableWord? onto the stack. 
     '''
-    def execute(self, stack):
-        stack.insert(0, self.__doc__)
+
+        }.iteritems():
+        t = Text(name, text)
+        stack = [t, interpreter]
+        TV.execute(stack)
+        T = stack[0]
+        T.name = name
+        interpreter.dictionary[name] = T
 
 
 class GuideWords(ExecutableWord):
@@ -192,7 +204,7 @@ class GuideWords(ExecutableWord):
 ##
 
     '''
-        * Guide = "show" GuideViewer
+        * Guide = "show" Guide
         * TextViewerGuide = "show" TextViewerGuide
     '''
 ##    '''
