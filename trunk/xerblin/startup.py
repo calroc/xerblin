@@ -6,21 +6,6 @@
 # Button are created, that's in the bin/xerblin script.
 
 startup_script = (
-    # First, create a TextViewer on the built-in word "Guide".
-    # (It's in xerblin/lib/guide.py.)
-    '''self Guide textviewer '''
-
-    # Name it "GuideViewer" and inscribe it into the Dictionary.
-    '''"GuideViewer" setname
-        self Inscribe drop '''
-    
-    # Create a TextViewer for the TextViewerGuide.
-    '''
-    self TVGuide textviewer
-    "TextViewerGuide" setname
-    self Inscribe drop
-    "hide" TextViewerGuide
-    '''
 
     # Create the words in the built-in word "GuideWords".
     '''self GuideWords makewords drop '''

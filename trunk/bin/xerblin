@@ -37,6 +37,7 @@ from xerblin.lib import words
 from xerblin import Object
 from xerblin.startup import startup_script
 from xerblin.lib.widgets.listwidgets import MakeViewer, SequenceController
+from xerblin.lib.guide import InscribeDocumentationWords
 
 
 def _makeGuideButton(I):
@@ -51,6 +52,7 @@ def _makeGuideButton(I):
             ipady=23,
             )
 
+
 def main():
     I = Object(name='Xerblin', dictionary=words)
     stackviewer = MakeViewer(
@@ -59,6 +61,7 @@ def main():
         SequenceController,
         )
     I.dictionary['StackViewer'] = stackviewer
+    InscribeDocumentationWords(I)
     I.interpret(startup_script)
     _makeGuideButton(I)
     Tkinter.mainloop()
