@@ -22,7 +22,7 @@ def InscribeDocumentationWords(interpreter):
 
     Once you have some numbers on the stack, you can Invoke math commands to use the interface like a calculator:  add  sub  (See below for more.)
 
-    You can also just Invoke the word calc but first you must put some text on the stack that describes an equation.  For example, let's say you wanted to know what three times twenty-seven was.  Select the folowing text, but before you let go of the mouse button press the right button once too.  (Then let go of all the buttons.)
+    You can also just Invoke the word calc but first you must put some text on the stack that describes an equation.  For example, let's say you wanted to know what three times twenty-seven was.  Select the following text, but before you let go of the mouse button press the right button once too.  (Then let go of all the buttons.)
 
     3 * 27
 
@@ -260,6 +260,15 @@ class GuideWords(ExecutableWord):
     '''
         * Guide = "show" Guide
         * TextViewerGuide = "show" TextViewerGuide
+        * new-list = meta meta pop swap push unmeta
+        * new-text = texts self "" textviewer push drop
+        * save = meta scratchpad swap push drop
+
+          t = pop swap drop unmeta
+          i & t Nop
+        * restore = scratchpad dup i
+
+        * drop-all = meta drop
     '''
 ##    '''
 ##        * TextViewerGuide = "show" TextViewerGuide

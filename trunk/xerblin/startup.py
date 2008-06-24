@@ -7,6 +7,12 @@
 
 startup_script = (
 
+    # Create a default list to put texts.
+    ''' meta "texts" constant self Inscribe drop '''
+
+    # Create a list as a scratchpad.
+    ''' meta "scratchpad" constant self Inscribe drop '''
+
     # Set the StackViewer in the corner.
     ''' 480 364 0 0 meta''' # some coordinates. Now call setGeometry.
     ''' self "StackViewer" lookup "setGeometry" lookup InvokeWord'''
