@@ -121,9 +121,6 @@ class SequenceViewer(AbstractSequenceViewer):
 
         stack = stack2view(self.model)
 
-        #Put TOS (Top Of Stack) on the top of the list.
-##        stack.reverse()
-
         #Get rid of the old contents.
         self.lb.delete(0, 'end')
 

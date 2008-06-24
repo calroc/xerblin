@@ -244,12 +244,9 @@ class TextViewerWidget(Text, mousebindingsmixin):
         self.interpreter = kw.pop('interpreter')
         self.model = kw.pop('model', None)
 
-##        self.interpreter.windows.append(self)
-
         #Turn on undo, but don't override a passed-in setting.
         kw.setdefault('undo', True)
 
-##        kw.setdefault('bg', 'white')
         kw.setdefault('wrap', 'word')
         kw.setdefault('font', 'arial 12')
 
@@ -272,8 +269,6 @@ class TextViewerWidget(Text, mousebindingsmixin):
         self.tk.call(self._w, 'edit', 'modified', 0)
         self.bind('<<Modified>>', self._beenModified)
         self._resetting_modified_flag = False
-
-##        T.protocol("WM_DELETE_WINDOW", self.onclose(T))
 
     def _beenModified(self, event):
         if self._resetting_modified_flag:
@@ -308,10 +303,6 @@ class TextViewerWidget(Text, mousebindingsmixin):
             self.model.value = data
         finally:
             self['state'] = NORMAL
-
-##        tags = self._saveTags()
-##        chunks = self.DUMP()
-##        print chunks
 
     def _saveAfter(self, delay):
         '''
