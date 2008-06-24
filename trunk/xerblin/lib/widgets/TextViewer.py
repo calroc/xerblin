@@ -318,7 +318,7 @@ class TextViewerWidget(Text, mousebindingsmixin):
         else:
             if save:
                 self.after_cancel(save)
-                save = None
+                self._save = None
 
     def findCommandInLine(self, line, index):
         '''findCommandInLine(line, index) => command, begin, end
