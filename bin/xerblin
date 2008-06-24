@@ -38,6 +38,9 @@ from xerblin import Object
 from xerblin.startup import startup_script
 from xerblin.lib.widgets.listwidgets import MakeViewer, SequenceController
 from xerblin.lib.guide import InscribeDocumentationWords
+from xerblin.util.timed import Timed
+from xerblin.util.backtime import attemptBackup
+from xerblin.messaging import RootViewer, ModelMixin
 
 
 def _makeGuideButton(I):
@@ -55,6 +58,13 @@ def _makeGuideButton(I):
 
 def main():
     I = Object(name='Xerblin', dictionary=words)
+
+    # Create a time-delayed call to attemptBackup()
+    tm = Timed(T, lambda: attemptBackup(I))
+
+    # Arrange to have it triggered on every NotifyMessage.
+    ModelMixin.root = RootViewer(None, lambda message: tm.trigger())
+
     stackviewer = MakeViewer(
         "Xerblin Stack",
         I.stack,

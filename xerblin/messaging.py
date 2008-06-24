@@ -48,14 +48,13 @@ class Viewer(object):
 
 
 class RootViewer(Viewer):
+
+    def __init__(self, model, save_function):
+        self.save_function = save_function
+        Viewer.__init__(self, model)
+
     def handle(self, message):
-        model, method, args = (
-            message.model,
-            message.method_name,
-            message.args
-            )
-        t, i = model.__class__.__name__, id(model)
-        print '%s %i . %s %r' % (t, i, method, args)
+        self.save_function(message)
         return Viewer.handle(self, message)
 
 
