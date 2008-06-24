@@ -1,13 +1,16 @@
 from cPickle import dump, load
 from os import listdir
-from os.path import join
+from os.path import join, expanduser
 
 
 FILENAME_PATTERN = 'xerblin.%i.pickle'
-DEFAULT_PATH = '/home/sforman/xerblin/pickles'
+DEFAULT_PATH = expanduser('~/xerblin/pickles')
 
 
 def attemptBackup(I, path=DEFAULT_PATH):
+    if __debug__:
+        print 'fake attemptBackup(I)', I
+        return
     n = getMaxN(path) + 1
     fn = join(path, FILENAME_PATTERN % n)
     F = open(fn, 'w')
