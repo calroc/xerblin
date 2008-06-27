@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-    Copyright (C) 2004, 2005, 2006, 2007 Simon Forman
+    Copyright (C) 2004 - 2008 Simon Forman
 
     This file is part of Xerblin.
 
@@ -19,20 +19,22 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 """
-import Tkinter
-T = Tkinter.Tk()
+from Tkinter import Tk, Button, X, mainloop
+
+# Create Teh Tk instance right away so we're sure we have it (i.e. it's
+# not randomly given to some widget in the library or startup routines.)
+T = Tk()
 T.title('Xerblin')
-Tkinter.Button(
+
+# The only thing this "App" window provides is a means to quit the program.
+Button(
     T,
     text='Close Xerblin',
     command=T.destroy
-    ).pack(
-        ipadx=123,
-        ipady=23,
-        )
-T.iconify()
+    ).pack(ipadx=123, ipady=23)
 
 
+# Begin the script proper.
 from xerblin.lib import words
 from xerblin import Object
 from xerblin.startup import startup_script
@@ -44,37 +46,62 @@ from xerblin.messaging import RootViewer, ModelMixin
 
 
 def _makeGuideButton(I):
-    Tkinter.Button(
+    '''
+    Helper function to add a button to the main app that opens the Guide
+    TextViewer (in case the user has closed it and all other viewers.)
+
+    With this button and the close button the base "App" is finished.  You
+    can get out of the system and you can always bootstrap back into it if
+    you close everything (but the main window, which must by definition
+    remain open for the whole program to keep running) by simply opening
+    the Guide viewer and typing in any command you want to run (including
+    the commands that open the rest of the viewers in your world.)
+    '''
+    Button(
         T,
         text='Open Guide',
-        command=lambda n=None: I.interpret("Guide")
+        command=lambda: I.interpret("Guide")
         ).pack(
             expand=True,
-            fill=Tkinter.X,
+            fill=X,
             ipadx=23,
             ipady=23,
             )
 
 
 def main():
+
+    # Create the world and populate it with the library's words.
     I = Object(name='Xerblin', dictionary=words)
 
-    # Create a time-delayed call to attemptBackup()
+    # Create a time-delayed proxy caller to attemptBackup()
     tm = Timed(T, lambda: attemptBackup(I))
 
     # Arrange to have it triggered on every NotifyMessage.
     ModelMixin.root = RootViewer(None, lambda message: tm.trigger())
 
-    stackviewer = MakeViewer(
-        "Xerblin Stack",
-        I.stack,
-        SequenceController,
+    # By default ALWAYS open a ListViewer (i.e. SequenceController) on
+    # the world's Stack.
+    I.dictionary['StackViewer'] = MakeViewer(
+        "Xerblin Stack",    # name
+        I.stack,            # model
+        SequenceController, # viewer/controller class
         )
-    I.dictionary['StackViewer'] = stackviewer
+
+    # Insert Guide, et. al.
     InscribeDocumentationWords(I)
+
     I.interpret(startup_script)
+
+    # Add the "dummy button".  I.e. you can always open the Guide so you're
+    # not screwed if you close every window.  (Could also make it so that
+    # clicking on the background does something:
+    #     * menu pop up (but that's the same as "show Guide" in xerbin...)
+    # Also, either exit or rtfm. lol.
     _makeGuideButton(I)
-    Tkinter.mainloop()
+
+    # Go!
+    mainloop()
 
 
 if __name__ == '__main__':
