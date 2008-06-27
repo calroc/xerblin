@@ -1,6 +1,3 @@
-
-basedir =  __path__[0]
-
 from base import (
     BranchExecutableWord,
     ExecutableWord,
@@ -15,11 +12,3 @@ from base import (
     warranty,
     SelfWord,
 )
-
-##import library
-##
-##import lib
-
-##from xerblin.thirdparty import *
-
-

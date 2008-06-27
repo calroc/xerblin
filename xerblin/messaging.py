@@ -1,5 +1,37 @@
 '''
+    Copyright (C) 2004 - 2008 Simon Forman
+
+    This file is part of Xerblin.
+
+    Xerblin is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
 Provide Level 1 Messaging.
+
+This is a pretty simple MVC system with message broadcasting inspired by
+the Oberon system.
+
+There are several classes of "model" objects that have a notify() method
+that's called when the models' states change.  This sends a message to a
+root viewer (generally not actually visualized, i.e. no widget) which
+then takes care of broadcasting the message into a tree of Viewer or
+Controller objects.
+
+Viewer objects are tied to models.  When a Viewer receives a message that
+was sent by its model object it updates its display.
+
+There are more model classes defined in the xerblin.util.models module.
 '''
 from xerblin.util.log import log
 
@@ -15,6 +47,10 @@ class Viewer(object):
         self._current_message = None
 
     def handle(self, message):
+        '''
+        Return a Boolean indicating if a message affected our model or
+        the models of one of our children (True) or not (False).
+        '''
         if not self._checkMessage(message):
             return False
 
@@ -191,6 +227,3 @@ if __name__ == '__main__':
     some_object.append('bananas')
     some_object.extend(('fruits', 'nuts', 'berries'))
     some_object.remove('fruits')
-
-
-
