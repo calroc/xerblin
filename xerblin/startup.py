@@ -14,7 +14,7 @@ startup_script = (
     ''' meta "scratchpad" constant self Inscribe drop '''
 
     # Set the StackViewer in the corner.
-    ''' 480 364 0 0 meta''' # some coordinates. Now call setGeometry.
+    ''' 384 237 0 0 meta''' # some coordinates. Now call setGeometry.
     ''' self "StackViewer" lookup "setGeometry" lookup InvokeWord'''
     
 
@@ -22,12 +22,7 @@ startup_script = (
     ''' "hide" TextViewerGuide '''
 
     # Create the words in the built-in word "GuideWords".
+    # (GuideWords is defined in lib/guide.py.)
     '''self GuideWords makewords drop '''
 
-'''
-'''
 )
-##
-##self GuideWords makewords drop
-##'''
-##)

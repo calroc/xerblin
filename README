@@ -1,5 +1,5 @@
 Xerblin - A User Interface
-Copyright (C) 2004, 2005, 2006, 2007 Simon Forman
+Copyright (C) 2004, 2005, 2006, 2007, 2008 Simon Forman
 
 Xerblin is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-Sun Nov 25 21:22:58 PST 2007
+Friday, 27 June 2008
 
 This is a demo proof-of-concept version of the Xerblin system.
 
@@ -41,15 +41,10 @@ xerblin/base.py               - Basic Xerblin system.
 
 xerblin/lib/*                 - "Standard Library" Xerblin words
 
-
 bin/xerblin                   - The Xerblin script, i.e. run this
                                 (It should be installed automatically by
                                 following the instructions under
                                 "Installation" below.)
-
-bin/tkxerblin                 - Xerblin with Tkinter GUI.
-
-xerblin/test/test.py          - Minimal unittests
 
 xerblin/util/stackcheckers.py - Support for stack checking
 
@@ -59,8 +54,8 @@ xerblin/util/stackcheckers.py - Support for stack checking
 Installation
 ----------------------------------------------------
 
-To install the system you should have Python 2.4 or better.  Uncompress
-the Xerblin-0.8.tar.gz file and cd to the Xerblin-0.8 directory.  Run the
+To install the system you should have Python 2.5 or better.  Uncompress
+the Xerblin-*.tar.gz file and cd to the directory it creates.  Run the
 following as root (or using sudo):
 
     python setup.py install
@@ -80,9 +75,9 @@ Running Xerblin
 
 To use the system start xerblin in the background with a command like:
 
-    txxerblin &
+    xerblin &
 
-The commandline option:
+There is a single commandline option:
 
     -s <script file>
 
@@ -91,7 +86,8 @@ The commandline option:
         This is basically ".xerblinrc", however no file name is 
         automatically looked for or loaded.
 
-There you go.  If you want to know more please drop me a line,
+There you go.  The system starts with the Guide open. If you want to 
+know more please drop me a line,
 
 Simon Forman <forman.simon@gmail.com>
 
