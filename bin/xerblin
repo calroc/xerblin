@@ -88,8 +88,8 @@ def main():
         SequenceController, # viewer/controller class
         )
 
-    # Insert Guide, et. al. (the numbers are width, height, x, y.)
-    InscribeDocumentationWords(I, (390, 123, 650, 720))
+    # Insert Guide, et. al. (the numbers are x, y, w, h.)
+    InscribeDocumentationWords(I, (273, 30, 440, 550))
 
     I.interpret(startup_script)
 
