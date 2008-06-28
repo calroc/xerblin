@@ -1,16 +1,15 @@
+'''
+Helper module for startup.  The basic Documentation words are defined here.
+'''
 from xerblin import ExecutableWord
 from xerblin.util.models import Text
-from xerblin.lib.widgets.words import textviewer
-
-TV = textviewer()
 
 
-def InscribeDocumentationWords(interpreter):
-    for name, text in {
+# This dict contains named documentation strings.  These strings will be made
+# into TextViewers in the main interpreter.
+Documentation = dict(
 
-    "Guide":
-
-        '''Welcome
+    Guide = '''Welcome
     
     This is the Guide.  You can close this TextViewer and then open it again later by right-clicking on the word Guide in any TextViewer.  You can also reopen this Guide by using the "Open Guide" button on the Xerblin controller widget.
 
@@ -191,9 +190,7 @@ timedate
 
     ''',
 
-
-    "TextViewerGuide":
-    '''TextViewerGuide
+    TextViewerGuide = '''TextViewerGuide
 
 In the Xerblin TextViewer the left mouse button functions very much like most people are used to: when pressed once it sets the insertion cursor and when pressed once and dragged it traces out a selection.
 
@@ -239,27 +236,50 @@ Paste TOS = Middle, Left
 Pop/Paste TOS = Middle, Right
 
 '''
+    )
 
-        }.iteritems():
+
+def InscribeDocumentationWords(interpreter, coords):
+    '''
+    This helper function takes the above Documentation dict and converts
+    it into TextViewer objects in the interpreter's dictionary.
+    It's only used in the main xerblin script.
+    coords are a 4-tuple, the default (x, y, w, h) coords for the windows.
+    (See setGeometry in lib/widgets/widgetwrapper.py.)
+    '''
+    TV = interpreter.dictionary.get('textviewer')
+
+    for name, text in Documentation.iteritems():
+
+        # Convert the string into a Text var word.
         t = Text(name, text)
+
+        # Build a fake stack for TV.
         stack = [t, interpreter]
+
+        # Make the TextViewer Object.
         TV.execute(stack)
         T = stack[0]
+
+        # Set the name.
         T.name = name
-        setGeometry = T.dictionary['setGeometry']
-        setGeometry.execute([[390, 123, 650, 720]])
+
+        # Set the size and location of the Toplevel window.
+        T.dictionary['setGeometry'].execute([coords])
+
+        # "Inscribe" the word.
         interpreter.dictionary[name] = T
 
 
 class GuideWords(ExecutableWord):
-##
-##self TextViewerGuide textviewer "TextViewerGuideTextViewer" setname self Inscribe drop
-##"hide" TextViewerGuideTextViewer exec
-##
-
     '''
-        * Guide = "show" Guide
-        * TextViewerGuide = "show" TextViewerGuide
+    A helper word to let the startup script create these words at runtime.
+    Basically this is a hard-coded string constant.
+    '''
+
+    word_source = '''
+
+        * Stack = "show" StackViewer
         * new-list = meta meta pop swap push unmeta
         * new-text = texts self "" textviewer push drop
         * save = meta scratchpad swap push drop
@@ -269,11 +289,17 @@ class GuideWords(ExecutableWord):
         * restore = scratchpad dup i
 
         * drop-all = meta drop
-    '''
-##    '''
-##        * TextViewerGuide = "show" TextViewerGuide
-##    '''
+
+    ''' + ''.join(
+    # For each of the Documentation TextViewers, replace it with a SeqWord
+    # that shows the TextViewer.  This essentially makes the name of the
+    # viewer open it.  To get the viewer you must Evoke the SeqWord and pick
+    # out its trailing component (the TextViewer object.)
+    ' * %s = "show" %s ' % (n, n)
+    for n in Documentation
+    )
+
     def execute(self, stack):
-        stack.insert(0, self.__doc__)
+        stack.insert(0, self.word_source)
 
 

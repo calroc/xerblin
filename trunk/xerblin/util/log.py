@@ -3,7 +3,8 @@ import logging
 
 logging.basicConfig(
     level=logging.DEBUG,
-    filename='/tmp/loggy.log',
+    format='%(levelname)s %(asctime)s %(name)s :: %(message)s',
+    filename='/tmp/xerblin.log',
     )
 
 
