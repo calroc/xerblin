@@ -1,28 +1,34 @@
-from xerblin.util.spark import \
-    GenericScanner, GenericParser, GenericASTTraversal
-
 from xerblin import (
     SequentialExecutableWord,
     LoopExecutableWord,
     BranchExecutableWord,
+    UnknownWordError,
     )
-
+from xerblin.util.spark import (
+    GenericScanner,
+    GenericParser,
+    GenericASTTraversal,
+    )
 from xerblin.lib.constant import Constant
-from xerblin import UnknownWordError
 
 
 class Token:
+
     def __init__(self, type_, attr=None):
         self.type = type_
         self.attr = attr
 
-    def __cmp__(self, o): return cmp(self.type, o)
+    def __cmp__(self, o):
+        return cmp(self.type, o)
 
-    def __repr__(self): return '%s' % (self.attr or self.type)
+    def __repr__(self):
+        return '%s' % (self.attr or self.type)
 
 
 class AST:
+
     def __init__(self, type_, attr='', initial_kids=None):
+
         if isinstance(type_, Token):
             self.type = type_.type
             self.attr = type_.attr
@@ -35,14 +41,17 @@ class AST:
 
         self._kids = initial_kids or []
 
-    def __getitem__(self, i): return self._kids[i]
+    def __getitem__(self, i):
+        return self._kids[i]
 
-    def __len__(self): return len(self._kids)
+    def __len__(self):
+        return len(self._kids)
 
     def __setslice__(self, low, high, seq):
         self._kids[low:high] = seq
 
-    def __cmp__(self, o): return cmp(self.type, o)
+    def __cmp__(self, o):
+        return cmp(self.type, o)
 
     def __repr__(self):
         if self.attr:
@@ -84,6 +93,7 @@ class Scanner(GenericScanner):
 
 
 class Parser(GenericParser):
+
     def __init__(self, start='begin'):
         GenericParser.__init__(self, start)
 
@@ -138,7 +148,8 @@ class Parser(GenericParser):
         '''
         n = len(args)
 
-        if n == 1: return AST(args[0])
+        if n == 1:
+            return AST(args[0])
 
         if n == 2:
             if isinstance(args[0], list): args[:1] = args[0]
@@ -152,7 +163,8 @@ class Parser(GenericParser):
         '''
         n = len(args)
 
-        if n == 1: return AST(args[0])
+        if n == 1:
+            return AST(args[0])
 
         if n == 2:
             assert args[0].type == '*'
@@ -174,15 +186,12 @@ class Parser(GenericParser):
 
 class XerblinWordBuilderTraversal(GenericASTTraversal):
 
-    def __init__(self, interp):
+    def __init__(self):
         GenericASTTraversal.__init__(self, None)
 
-        self.interp = interp
-        self.reset()
-
-    def reset(self):
+    def reset(self, interp):
         self.new = []
-        self.namespace = self.interp.dictionary.copy()
+        self.namespace = interp.dictionary.copy()
 
     def nextWord(self, ast):
         self.ast = ast
@@ -192,17 +201,17 @@ class XerblinWordBuilderTraversal(GenericASTTraversal):
 
         self.postorder()
 
-        if getattr(ast, 'InscribeMe', False): self.new.append(self.word)
+        if getattr(ast, 'InscribeMe', False):
+            self.new.append(self.word)
 
         self.namespace[self.name] = self.word
-
-        return self.word
         
-    def makeWords(self, ASTs):
-        self.reset()
-        [self.nextWord(n) for n in ASTs]
+    def makeWords(self, ASTs, interp):
+        self.reset(interp)
+        for n in ASTs:
+            self.nextWord(n)
         for w in self.new:
-            self.interp.dictionary[w.name] = w
+            interp.dictionary[w.name] = w
 
     def n_symbol(self, node):
         try:
@@ -240,56 +249,4 @@ class XerblinWordBuilderTraversal(GenericASTTraversal):
         self.word.word0 = word0
 
     def default(self, node):
-        print 'default', node
-
-
-##if __name__ == '__main__':
-##    from pprint import pprint
-##    from xerblin import Interpreter
-####    s = '''
-####    Leroy = Sam  Laura Jenkins
-####    *Frank & Nop einstein
-####
-####    ralph @ tuck mod dup
-####    *GCD = dup ralph drop
-####
-####    *NewList = meta meta pop swap push unmeta
-####    '''
-####    print 'Source:'
-####    print s
-####    T = Scanner().tokenize(s)
-######    print 'Tokens:', T
-####    S = Parser().parse(T)
-######    print 'ASTs:', S
-####    print
-######    for s in S:
-######        s.pprint()
-######    print
-####    print
-####    for ast in S:
-######        ToXerblinTraversal(ast)
-####        PprintTraversal(ast)
-####        print
-##
-##    d = dict((n, ExecutableWord(n)) for n in "Abe Bob Cary".split())
-##    i = Interpreter([], d)
-##
-##    s = '''
-##    *ringo=23 18 "99" 1.2
-##    Dan & Abe Cary
-##    Ed @Bob Dan Cary
-##    *Fred = Dan Ed Bob Ed
-##    *Sam = Ed Fred 23 18.0 "isn't dead!"
-##    '''
-####    A = Parser().parse(Scanner().tokenize(s))
-####
-##    X = XerblinWordBuilderTraversal(i)
-####
-####    N = [X.nextWord(n) for n in A]
-####    NewWords = X.new
-####    for w in NewWords: i.dictionary[w.name] = w
-####
-####    print NewWords
-##
-##    MakeWords(X, s)
-##    print X.new
+        pass
