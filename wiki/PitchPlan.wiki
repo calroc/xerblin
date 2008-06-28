@@ -1,0 +1,106 @@
+= Xerblin - UI and Social Network =
+
+== The Problem (that we solve) ==
+
+Computers exist and are ever more ubiquitous, yet they remain hard to
+understand, hard to use, and a source of dangerous errors.
+
+Most of these problems can be traced to UI issues.  Our machines are
+harder to use than they have to be (sometimes to the point of physical
+danger) because we have made them that way.
+
+(Haven't you cursed out loud because of an interface PITA?)
+
+== Our Solution ==
+
+"Make it as simple as possible, but no simpler." -a smart fellow.
+
+Between the machine language and the users' models there are only
+abstractions, names for behavior.  In modern systems, these abstractions
+number in the thousands.  Users confronted with only 1% of the complexity
+of their machines must still joust with TENS of concepts to even begin to
+use them in the crudest ways.
+
+Xerblin is a simple metaphor for computation.  It can be taught quickly
+to any normal adult or child, and it is Turing-complete.
+
+There are less than a dozen concepts to grasp to master it completely,
+and they hang together in a smoothly synchronized manner to make the
+system extraordinarily fluid to use.
+
+Also, it is taught and learned in the context of a "thick" social
+network.  "Thick" in this context means lots of personal interaction
+(social functions, Pot Latch "Tupperware Party" gatherings, live demos,
+presence at conferences and flea markets, etc...) and high-bandwidth comms
+(video chat for consultation and customizing or troubleshooting, lots of
+vids on YouTube showing how to do things, feeds both audio and video,
+etc...)
+
+Anyone can be a Power User using Xerblin, and a crowd of happy friendly
+people are willing and able to show you how.
+
+== Underlying Magic ==
+
+One, the UI.  It's golden.  It gets rid of 98% of the UI garbage that
+drains all of our productivity all the time and it makes it so that
+people like my mom, who can solve sudoku puzzles but not grapple with
+the intricacies of Windows or even Word, can GROK their machines and
+boss them themselves.
+
+One "principal" of the system is, roughly, "one Command per user
+Intention".  If that ever stops being the case (I'll talk more about
+that in a sec) then one calls in one's friendly neighborhood Codesmith
+to adjust the command(-set).  I envision a network of people with
+graduated degrees of knowledge (more like Bay Scout merit badges than
+classes or grades) who can be on call to help others "fix" their UIs
+to be just how they like them.  There will be also gradations of
+remuneration from unpaid volunteer and intern work to professional
+service contracts with businesses.
+
+About "one Command per user Intention", generally users will have a
+small set of Purposes they use their computer for-- mindless
+entertainment counts too for our purposes :) no pun intended.  We
+basically want the person (my mom!) to be able to sit down at her
+computer with a task in mind and click ONE BUTTON to "do" it.   She
+might have to select some arguments for her command, heck here's an
+example:
+
+Mom wants to write an email to her sister.  She types (the system has
+a Text open already) "Janna" "some subject" "balh blah blah yackity
+yak etc" into the text, makes three gestures with the mouse to put
+three arguments onto the stack and right clicks "email".  We assume
+the email command already knows how to search and find aunt Janna's
+email addy.
+
+Already there is an improvement we can offer my mom: make the email
+command able to tease out the three args from one string itself.  Then
+mom can just make one mouse gesture.  etc etc etc...  That'll be fifty
+cents pls mom... :D
+
+You can extrapolate a lot from there I think, but the point is this:
+anytime user's using the computer and thinks "Hey, I wish it worked
+/this/ way" she can hit a "change UI" command that connects her with
+real people "Codesmiths" and Hey Presto!  It /does/ work like that
+now.
+
+AND, drumroll please, if that INNOVATION is good enough, the
+codesmiths turn around, bundle it up with some icing and
+documentation, and send it out into the social network marketplace to
+sink or swim in the UI meme pool.  As the original innovator mom gets
+a cut, as do the Codesmiths, Docwriters, etc..
+
+Which brings up the "long-chain" affiliate "program".  Basically I
+want to create an affiliate network for these UI innovations (and
+other media, but let's not get ahead of ourselves) with the
+distinction of having LONG "chains" or tiers of at least six degrees.
+The idea is to create a sort of dendrite network that filters all the
+content passing through it, routing new info to the nodes (people!)
+who can use it best, and promoting a sort of ferment of continuous UI
+improvement.  There's a lot more but I want to get to sleep soon. :D
+
+I'm rolling out xerby1 to my mom and sister probably this weekend.  I
+need to find more cheap or free machines that I can convert, plan and
+host my first "tupperware party", get video gear to film both the
+party and my mom and sister learning and using the system, and finish
+up the actual software to the point where subjecting my nearest and
+dearest to it won't be needlessly cruel. 
