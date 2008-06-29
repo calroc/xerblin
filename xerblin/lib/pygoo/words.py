@@ -4,7 +4,8 @@ from xerblin import Object, ExecutableWord
 from xerblin.lib.constant import Constant
 from xerblin.lib.widgets.widgetwrapper import (
     XerblinWindow,
-    iconifyToggle,
+    show,
+    hide,
     setGeometry,
     )
 from xerblin.lib.widgets.geometrybinder import GeometryBinder
@@ -215,7 +216,8 @@ class WidgetsObject(Object):
         D = dict(
             window=Constant('window', top),
             source=Constant('source', source),
-            iconifyToggle=iconifyToggle(top),
+            show=show(top),
+            hide=hide(top),
             setGeometry=setGeometry(top),
             )
 
