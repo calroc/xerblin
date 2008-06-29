@@ -18,8 +18,8 @@ startup_script = (
     ''' self "StackViewer" lookup "setGeometry" lookup InvokeWord'''
     
 
-    # Hide the TextViewerGuide.
-    ''' "hide" TextViewerGuide '''
+    # Show the first Guide.
+    ''' "show" Guide '''
 
     # Create the words in the built-in word "GuideWords".
     # (GuideWords is defined in lib/guide.py.)
