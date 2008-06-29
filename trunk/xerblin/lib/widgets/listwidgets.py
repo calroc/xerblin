@@ -1,5 +1,4 @@
 from Tkinter import Toplevel, BOTH
-
 from xerblin.messaging import ModelMixin, Viewer, ListModel
 from xerblin.lib.widgets.controllerlistbox import (
     DraggyListbox,

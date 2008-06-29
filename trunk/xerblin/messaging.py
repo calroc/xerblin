@@ -126,9 +126,9 @@ class ModelMixin:
 
 
 class ListModel(ModelMixin, list):
-    """
+    '''
     List that calls notify() when it's changed.
-    """
+    '''
 
     # All of the following methods extend list's methods to call
     # notify() above. These are all the methods of list that can

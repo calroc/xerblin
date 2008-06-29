@@ -1,4 +1,4 @@
-"""
+'''
     Copyright (C) 2004 - 2008 Simon Forman
 
     This file is part of Xerblin.
@@ -22,7 +22,7 @@ This package loads words from modules and subpackages automatically.
 
 Any subclass of ExecutableWord that can be successfully instantiated
 without arguments will be.
-"""
+'''
 from os import listdir
 from os.path import isdir, join
 from xerblin import (
