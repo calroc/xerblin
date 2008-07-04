@@ -1,4 +1,3 @@
-MANIFEST
 MANIFEST.in
 README
 setup.py
@@ -33,6 +32,7 @@ xerblin/lib/emit.py
 xerblin/lib/false.py
 xerblin/lib/getitem.py
 xerblin/lib/guide.py
+xerblin/lib/loadobject.py
 xerblin/lib/lookup.py
 xerblin/lib/meta.py
 xerblin/lib/metas.py
@@ -61,7 +61,6 @@ xerblin/lib/animation/animation.py
 xerblin/lib/animation/words.py
 xerblin/lib/makewords/__init__.py
 xerblin/lib/makewords/parser.py
-xerblin/lib/makewords/words.py
 xerblin/lib/pygoo/__init__.py
 xerblin/lib/pygoo/pygoo.py
 xerblin/lib/pygoo/tkplot.py
@@ -81,8 +80,9 @@ xerblin/test/testText.py
 xerblin/util/__init__.py
 xerblin/util/backtime.py
 xerblin/util/controller.py
-xerblin/util/editor.py
 xerblin/util/log.py
+xerblin/util/mainapp.py
 xerblin/util/models.py
 xerblin/util/spark.py
 xerblin/util/stackcheckers.py
+xerblin/util/timed.py

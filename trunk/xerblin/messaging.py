@@ -111,7 +111,7 @@ class ModelMixin:
     root viewer.
     '''
 
-    root = Viewer(None)
+    root = RootViewer(None, lambda message: None)
 
     def notify(self, method_name, args):
         message = NotifyMessage(self, method_name, args)
