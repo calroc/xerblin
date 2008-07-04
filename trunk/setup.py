@@ -21,6 +21,6 @@ setup(
         ],
     scripts=[
         'bin/xerblin',
-        'bin/restart-xerblin',
+        'bin/xerblin-fresh',
         ],
     )
