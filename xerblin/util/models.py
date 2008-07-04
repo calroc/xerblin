@@ -29,13 +29,13 @@ class Variable(ModelMixin, ExecutableWord):
 
     def __init__(self, name):
         ExecutableWord.__init__(self, name)
-        self._value = None
+        self.inner_value = None
 
     def getValue(self):
-        return self._value
+        return self.inner_value
 
     def setValue(self, value):
-        self._value = value
+        self.inner_value = value
         self.notify('set', (value,))
 
     value = property(getValue, setValue)
@@ -52,7 +52,7 @@ class TypedVariable(Variable):
 
     def __init__(self, name, initial_value=None):
         ExecutableWord.__init__(self, name)
-        self._value = self._type(initial_value)
+        self.inner_value = self._type(initial_value)
 
     def setValue(self, value):
         value = self._type(value)
@@ -72,7 +72,7 @@ class Text(TypedVariable):
         pass
 
     def __repr__(self):
-        return "<Text: %r>" % self._value[:23]
+        return "<Text: %r>" % self.inner_value[:23]
 
 
 class NumberVariable(TypedVariable):
@@ -83,4 +83,4 @@ class NumberVariable(TypedVariable):
     _type = int
 
     def __repr__(self):
-        return "<Int: %i>" % self._value
+        return "<Int: %i>" % self.inner_value

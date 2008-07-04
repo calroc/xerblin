@@ -17,6 +17,14 @@ class GeometryVariable(NumberVariable):
         super(GeometryVariable, self).setValue(value)
         self.gb.handleSet()
 
+    def __getstate__(self):
+        return self.value, self.gb
+
+    def __setstate__(self, state):
+        V, GB = state
+        self.inner_value = V
+        self.gb = GB
+
     value = property(Variable.getValue, setValue)
 
 
@@ -83,6 +91,21 @@ class GeometryBinder:
         w, h, x, y = map(int, m.groups())
         return w, h, x, y
 
+    def __getstate__(self):
+        return (
+            self.T,
+            self.vars,
+            self.dict_of_vars,
+            )
+
+    def __setstate__(self, state):
+        T, V, D = state
+        self.T = T
+        self._configuring = False
+        self.vars = V
+        self.dict_of_vars = D
+        self.handleSet()
+        self.T.bind('<Configure>', self.configureCallback)
 
 
 if __name__ == '__main__':
