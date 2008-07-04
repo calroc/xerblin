@@ -164,7 +164,7 @@ def MakeViewer(
 
     # Create the Object.
     o = Object(dictionary=D)
-    o._gb = gb # Don't let's garbage collect the GeometryBinder, eh what?
+    o.gb = gb # Don't let's garbage collect the GeometryBinder, eh what?
 
     return o
 
