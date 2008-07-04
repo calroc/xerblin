@@ -33,6 +33,9 @@ from xerblin import (
     Object,
     )
 from xerblin.util.log import log
+from xerblin.lib.constant import Constant
+from xerblin.lib.variable import Variable
+from xerblin.lib.guide import Text
 
 
 # Don't load these modules.
@@ -50,6 +53,9 @@ exclude_word_classes = set((
     LoopExecutableWord,
     SequentialExecutableWord,
     Object,
+    Constant,
+    Variable,
+    Text,
     ))
 
 
