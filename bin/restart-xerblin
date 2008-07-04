@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+'''
+    Copyright (C) 2004 - 2008 Simon Forman
+
+    This file is part of Xerblin.
+
+    Xerblin is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+This is a simple script to load the most recent Xerblin history pickle.
+
+'''
+from Tkinter import Tk, mainloop
+
+# Create Teh Tk instance right away so we're sure we have it.
+T = Tk()
+
+
+from xerblin import Object
+from xerblin.util.mainapp import MainApp
+from xerblin.util.backtime import (
+    attemptBackup,
+    listBackupFiles,
+    restorePrevious,
+    )
+from xerblin.util.timed import Timed
+from xerblin.messaging import RootViewer, ModelMixin
+
+
+# Get an indexed batch of the available saved files.
+D = dict(listBackupFiles())
+
+
+# It's alive! It's ALIVE!!
+O = Object()
+if D:
+    fn = D[max(D)]
+    restorePrevious(O, fn)
+
+
+# Create a time-delayed proxy caller to attemptBackup()
+tm = Timed(T, lambda: attemptBackup(O))
+
+# Arrange to have it triggered on every NotifyMessage.
+ModelMixin.root.save_function = lambda message: tm.trigger()
+
+app = MainApp(T, O)
+
+mainloop()
