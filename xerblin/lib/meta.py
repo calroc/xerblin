@@ -1,6 +1,5 @@
 from xerblin import ExecutableWord
 from xerblin.messaging import ListModel
-from copy import copy
 
 
 class meta(ExecutableWord):
