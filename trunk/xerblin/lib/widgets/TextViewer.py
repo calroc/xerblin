@@ -540,10 +540,12 @@ class TextViewerWidget(Text, mousebindingsmixin):
         if not self.command:
             return
 
-        word = self.interpreter.dictionary.get(self.command)
-        if word:
-            # "Bunt" for now.
-            print 'opendoc', word
+        # Get the command word, or just the command string if there's no
+        # word.
+        word = self.interpreter.dictionary.get(self.command, self.command)
+
+        self.interpreter.stack.insert(0, word)
+        self.interpreter.interpret("open")
 
     def lookup(self, event):
         '''Look up the current command.'''

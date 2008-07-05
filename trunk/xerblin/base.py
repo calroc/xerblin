@@ -190,14 +190,6 @@ class ExecutableWord(object):
         _stackok - Check if a list of args matches the input_args.
         _resultsok - Check if a list of results matches the output_args.
 
-        The following methods form the machinery to maintain a list of
-        refs to the ExecutableWord's parents. The parents of an
-        ExecutableWord are those combo words that have the ExecutableWord
-        as a "child". These words should usually be called from the _addkid()
-        method described below.
-
-        _addkid - Add an ExecutableWord to self. For ComboExecutableWords.
-
     """
 
     def __init__(self, name=None):
