@@ -1,9 +1,5 @@
 #summary The basic unit of command.
 
-= ExecutableWords =
-
-These are the basic commands of the system.
-
 An Executable Word can be considered a single unit of computer action. It encapsulates one action that your computer can perform. An Executable Word can be as low-level and simple as adding two integers together or as high-level as grep
 
 Executable words differ from usual programs in several ways,
