@@ -18,48 +18,40 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-This is a simple script to load the most recent Xerblin history pickle.
-
 '''
-from Tkinter import Tk, mainloop
-
-# Create Teh Tk instance right away so we're sure we have it.
-T = Tk()
-
-
+from xerblin.lib import words
 from xerblin import Object
+from xerblin.startup import startup_script
+from xerblin.lib.widgets.listwidgets import MakeViewer, SequenceController
+from xerblin.lib.guide import InscribeDocumentationWords
 from xerblin.util.mainapp import MainApp
-from xerblin.util.backtime import (
-    attemptBackup,
-    listBackupFiles,
-    restorePrevious,
-    )
 from xerblin.util.timed import Timed
+from xerblin.util.backtime import attemptBackup
 from xerblin.messaging import RootViewer, ModelMixin
 
 
-# Get an indexed batch of the available saved files.
-D = dict(listBackupFiles())
+def fresh(T):
 
-
-if D:
-    # It's alive! It's ALIVE!!
-    O = Object()
-
-    # Load up it's history..
-    restorePrevious(O, D[max(D)])
+    # Create the world and populate it with the library's words.
+    I = Object(name='Xerblin', dictionary=words)
 
     # Create a time-delayed proxy caller to attemptBackup()
-    tm = Timed(T, lambda: attemptBackup(O))
+    tm = Timed(T, lambda: attemptBackup(I))
+
     # Arrange to have it triggered on every NotifyMessage.
-    ModelMixin.root.save_function = lambda message: tm.trigger()
+    ModelMixin.root = RootViewer(None, lambda message: tm.trigger())
 
-    # Create the main app window in the Tk instance.
-    MainApp(T, O)
+    app = MainApp(T, I)
 
-else:
-    from xerblin.util.fresh import fresh
-    fresh(T)
+    # By default ALWAYS open a ListViewer (i.e. SequenceController) on
+    # the world's Stack.
+    I.dictionary['StackViewer'] = MakeViewer(
+        "Xerblin Stack",    # name
+        I.stack,            # model
+        SequenceController, # viewer/controller class
+        )
 
+    # Insert Guide, et. al. (the numbers are x, y, w, h.)
+    InscribeDocumentationWords(I, (273, 30, 440, 550))
 
-mainloop()
+    I.interpret(startup_script)
