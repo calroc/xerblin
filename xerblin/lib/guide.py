@@ -375,6 +375,7 @@ class GuideWords(ExecutableWord):
         * restore = scratchpad dup i
 
         * drop-all = meta drop
+        * open = self swap open
 
     ''' + ''.join(
     # For each of the Documentation TextViewers, replace it with a SeqWord
