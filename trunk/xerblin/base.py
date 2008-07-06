@@ -331,14 +331,19 @@ class SequentialExecutableWord(ExecutableWord, ListModel):
         ExecutableWord.__init__(self, name)
 
     def __getstate__(self):
-        return self.name, list(self)
+        state = [self.name, list(self)]
+        if hasattr(self, 'doc'):
+            state.append(self.doc)
+        return state
 
     def __setstate__(self, state):
-        name, items = state
+        name, items = state[:2]
         self.name = name
 ##        list.__setslice__(self, 0, 0, items) # Huh!?  w/o this unpickling
         # creates the seq words just fine, with it they each have 2x their
         # words.  I.e. "seq = 0 1 2 0 1 2"  (not "= 0 1 2")
+        if len(state) == 3:
+            self.doc = state[2]
 
     def execute(self, stack):
         """
