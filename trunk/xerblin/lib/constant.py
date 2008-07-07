@@ -3,9 +3,8 @@ from xerblin.util.stackcheckers import StackLen, StackType
 
 
 class Constant(ExecutableWord):
-    '''
-    Push a constant value onto the stack.
-    '''
+    #
+    # Push a constant value onto the stack.
     #
     # Note that this class will raise an exception when the
     # xerblin.lib.__init__ machinery tries to instantiate it without args.
@@ -21,8 +20,8 @@ class Constant(ExecutableWord):
 
 
 class constant(StackLen(2), StackType(0, basestring), ExecutableWord):
-    '''
-    Create a named constant with a given value.
+    '''constant
+    Given value and a name on the stack create a named constant.
     '''
     def execute(self, stack):
         new_constant = Constant(stack[0], stack[1])

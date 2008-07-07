@@ -3,7 +3,7 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class setitem(StackLen(3), ExecutableWord):
-    '''
+    '''setitem
     Given an object, key and value on the stack do:
         object[key] = value
 

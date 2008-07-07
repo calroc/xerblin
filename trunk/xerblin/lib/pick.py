@@ -3,9 +3,8 @@ from xerblin.util.stackcheckers import StackLen, StackType
 
 
 class pick(StackLen(1), StackType(0, int), ExecutableWord):
-    '''
-    Take an int N from the Stack and copy the Nth remaining item (counting
-    from zero) and duplicate it to the top of the Stack.
+    '''pick
+    Take an integer N from the Stack and copy the Nth remaining item (counting from zero) and duplicate it to the top of the Stack.
     '''
 
     def _stackok(self, stack):

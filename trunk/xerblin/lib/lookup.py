@@ -8,8 +8,8 @@ class lookup(
     StackType(1, Object),
     ExecutableWord
     ):
-    '''
-    Look up a word in the dictionary.
+    '''lookup
+    Look up a word in the dictionary.  Requires an Object and a text string.
     '''
     def execute(self, stack):
         '''Look up a word in the dictionary. Returns None if not found.'''

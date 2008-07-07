@@ -3,7 +3,7 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class emit(ExecutableWord):
-    '''
+    '''emit
     Print TOS, and drop it.
     '''
 

@@ -4,7 +4,7 @@ from xerblin.messaging import ListModel
 
 
 class words(StackLen(1), StackType(0, SimpleInterpreter), ExecutableWord):
-    '''
+    '''words
     Given an Object on the stack replace it with a list of its words.
     '''
     def execute(self, stack):

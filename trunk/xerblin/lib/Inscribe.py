@@ -7,9 +7,8 @@ class Inscribe(
     StackType(0, SimpleInterpreter),
     StackType(1, ExecutableWord),
     ExecutableWord):
-    '''
-    Inscribe a named word into the dictionary, if there isn't already one
-    with the same name.
+    '''Inscribe
+    Inscribe a named word into the dictionary, if there isn't already one with the same name.
     '''
     def execute(self, stack):
         interpreter, word = stack[:2]

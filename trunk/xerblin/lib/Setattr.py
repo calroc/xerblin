@@ -3,7 +3,7 @@ from xerblin.util.stackcheckers import StackLen, StackType
 
 
 class Setattr(StackLen(3), StackType(1, basestring), ExecutableWord):
-    '''
+    '''setattr
     Implments setattr(object, name, value)
     '''
 

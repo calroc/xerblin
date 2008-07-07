@@ -3,7 +3,7 @@ from xerblin import ExecutableWord
 
 
 class sysexit(ExecutableWord):
-    '''
+    '''sys.exit
     Exit the system, i.e. quit xerblin.
     '''
 

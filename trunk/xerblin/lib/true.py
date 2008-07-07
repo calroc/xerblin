@@ -2,8 +2,8 @@ from xerblin import ExecutableWord
 
 
 class true(ExecutableWord):
-    '''
-    Push True onto the stack.
+    '''true
+    Push Boolean true onto the stack.
     '''
     def execute(self, stack):
         stack.insert(0, True)

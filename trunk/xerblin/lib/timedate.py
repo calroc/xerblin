@@ -3,7 +3,7 @@ from xerblin import ExecutableWord
 
 
 class timedate(ExecutableWord):
-    '''
+    '''timedate
     Put a string representing the current time and date onto the stack.
     '''
     def execute(self, stack):
@@ -11,7 +11,7 @@ class timedate(ExecutableWord):
 
 
 class Time(ExecutableWord):
-    '''
+    '''time
     Put the current time in seconds onto the stack.
     '''
 

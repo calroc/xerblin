@@ -3,7 +3,8 @@ from xerblin.util.stackcheckers import StackLen
 from math import *
 
 class calc(StackLen(1), ExecutableWord):
-    '''
+    '''calc
+
     Calculate the expression on TOS.
 
 First you must put some text on the stack that describes an equation.  For example, let's say you wanted to know what three times twenty-seven was.  Select the following text, but before you let go of the mouse button press the right button once too.  (Then let go of all the buttons.)

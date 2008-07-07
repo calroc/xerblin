@@ -3,7 +3,7 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class boolean(StackLen(1), ExecutableWord):
-    '''
+    '''boolean
     Replace the top item on the stack with its Boolean value.
     '''
 
@@ -12,8 +12,8 @@ class boolean(StackLen(1), ExecutableWord):
 
 
 class Not(StackLen(1), ExecutableWord):
-    '''
-    Replace the top item on the stack with its Boolean value.
+    '''not
+    Replace the top item on the stack with its opposite Boolean value.
     '''
     __name__ = 'not'
     def execute(self, stack):
@@ -21,8 +21,8 @@ class Not(StackLen(1), ExecutableWord):
 
 
 class And(StackLen(2), ExecutableWord):
-    '''
-    Replace the top item on the stack with its Boolean value.
+    '''and
+    Boolean AND of the top two items on the stack.
     '''
     __name__ = 'and'
     def execute(self, stack):
@@ -30,9 +30,10 @@ class And(StackLen(2), ExecutableWord):
 
 
 class Or(StackLen(2), ExecutableWord):
-    '''
-    Replace the top item on the stack with its Boolean value.
+    '''or
+    Boolean OR of the top two items on the stack.
     '''
     __name__ = 'or'
     def execute(self, stack):
         stack[:2] = [stack[0] or stack[1]]
+

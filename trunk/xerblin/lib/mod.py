@@ -3,8 +3,8 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class mod(StackLen(2), ExecutableWord):
-    '''
-    Find the remainder if you divide the second integer by the first.
+    '''mod
+    Find the remainder if you divide the second number by the first.
     '''
 
     def execute(self, stack):

@@ -3,7 +3,7 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class swap(StackLen(2), ExecutableWord):
-    '''
+    '''swap
     Swap the places of the top two items on the stack.
     '''
 
