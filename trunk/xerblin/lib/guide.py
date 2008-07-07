@@ -15,13 +15,13 @@ Documentation = dict(
 
     Right-clicking on a word that is also the name of a Xerblin ExecutableWord will "Invoke" that word, causing it to perform its action.  You can tell if a word is a command because it will light up orange if you try right-clicking on it.  If you click the left button before releasing the right button you will open a doc about the word.
 
-    You can also Invoke numbers by right-clicking on them.  Invoking a number puts it onto the stack.  Try it with these numbers:
+Fun words:
 
-        23      17
+    calc - solve equations.  Type in an equation, put it on the stack (see below) and Invoke calc
+
+    For a list of all the commands in the system Invoke Words .  Words opens a textviewer with a generated list of all the current words.  You can use open these words to read their documentation.  You can also Invoke WordList which opens a textviewer on a categorized list of some of the more useful words.
 
     You can also put text on the stack.  First select some text, then before you let go of the left mouse button press the right button too, then release both buttons.  The text you selected will appear on the stack.  You can also use the middle button instead of the right button and the text selection will removed (cut) from the textviewer as well as put on the stack.
-
-
 
 Here is a summary of textviewer Mouse commands.  Open textviewer for more details about textviewers.
 
@@ -38,10 +38,6 @@ Paste TOS = Middle, Left
 Pop/Paste TOS = Middle, Right
 
 (TOS means "Top Of Stack", i.e. the item on the top of the Stack.)
-
-
-For a list of all the commands in the system Invoke Words
-
 ''',
 
     WordList = '''WordList
@@ -123,13 +119,11 @@ time timedate
     )
 
 
-def InscribeDocumentationWords(interpreter, coords):
+def InscribeDocumentationWords(interpreter):
     '''
     This helper function takes the above Documentation dict and converts
     it into textviewer objects in the interpreter's dictionary.
     It's only used in the main xerblin script.
-    coords are a 4-tuple, the default (x, y, w, h) coords for the windows.
-    (See setGeometry in lib/widgets/widgetwrapper.py.)
     '''
     TV = interpreter.dictionary.get('textviewer')
 
@@ -148,8 +142,6 @@ def InscribeDocumentationWords(interpreter, coords):
         # Set the name.
         T.name = name
 
-        # Set the size and location of the Toplevel window.
-        T.dictionary['setGeometry'].execute([coords])
         T.dictionary['hide'].execute([])
 
         # "Inscribe" the word.
