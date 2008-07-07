@@ -88,8 +88,10 @@ Numbers => Open a TextViewer on their string representation.
                 BranchExecutableWord,
                 LoopExecutableWord,
                 SequentialExecutableWord,
-                Object,
                 )):
+                doc = word.name + '\n\n' + repr(word)
+
+            elif isinstance(word, Object):
                 doc = word.name
 
             # or then just use the python doc string.

@@ -51,7 +51,7 @@ def fresh(T):
         SequenceController, # viewer/controller class
         )
 
-    # Insert Guide, et. al. (the numbers are x, y, w, h.)
-    InscribeDocumentationWords(I, (273, 30, 440, 550))
+    # Insert Guide, et. al.
+    InscribeDocumentationWords(I)
 
     I.interpret(startup_script)
