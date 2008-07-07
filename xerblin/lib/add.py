@@ -3,8 +3,8 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class add(StackLen(2), ExecutableWord):
-    '''
-    Add two integers together.
+    '''add
+    Add two numbers together.
     '''
 
     def execute(self, stack):

@@ -4,7 +4,7 @@ from xerblin.util.models import Variable
 
 
 class variable(StackLen(1), StackType(0, basestring), ExecutableWord):
-    '''
+    '''variable
     Create a named variable.
     '''
     def execute(self, stack):
@@ -13,7 +13,7 @@ class variable(StackLen(1), StackType(0, basestring), ExecutableWord):
 
 
 class Set(StackLen(2), StackType(1, Variable), ExecutableWord):
-    '''
+    '''set
     Set a value to a variable.
     '''
     __name__ = 'set'
@@ -24,7 +24,7 @@ class Set(StackLen(2), StackType(1, Variable), ExecutableWord):
 
 
 class get(StackLen(1), StackType(0, Variable), ExecutableWord):
-    '''
+    '''get
     Get the value of a variable.
     '''
     def execute(self, stack):

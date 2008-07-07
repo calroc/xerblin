@@ -3,7 +3,7 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class getitem(StackLen(2), ExecutableWord):
-    '''
+    '''getitem
     Given an object and key on the stack return object[key].
     '''
     def execute(self, stack):

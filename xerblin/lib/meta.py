@@ -3,7 +3,7 @@ from xerblin.messaging import ListModel
 
 
 class meta(ExecutableWord):
-    '''
+    '''meta
     Replace the contents of the stack with a list containing them.
     '''
     def execute(self, stack):

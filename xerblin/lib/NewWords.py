@@ -22,7 +22,7 @@ from xerblin import (
 
 
 class NewBranchWord(ExecutableWord):
-    '''
+    '''NewBranchWord
     Put a new branch word on the stack.
     '''
     def execute(self, stack):
@@ -30,7 +30,7 @@ class NewBranchWord(ExecutableWord):
 
 
 class NewLoopWord(ExecutableWord):
-    '''
+    '''NewLoopWord
     Put a new loop word on the stack.
     '''
     def execute(self, stack):
@@ -38,8 +38,9 @@ class NewLoopWord(ExecutableWord):
 
 
 class NewSeqWord(ExecutableWord):
-    '''
+    '''NewSeqWord
     Put a new sequential word on the stack.
     '''
     def execute(self, stack):
         stack.insert(0, SequentialExecutableWord())
+

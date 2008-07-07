@@ -3,7 +3,7 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class rot(StackLen(3), ExecutableWord):
-    '''
+    '''rot
     Rotate the top three items on the stack.
     '''
 

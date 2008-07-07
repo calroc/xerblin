@@ -3,8 +3,8 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class mul(StackLen(2), ExecutableWord):
-    '''
-    Multiply two integers together.
+    '''mul
+    Multiply two numbers together.
     '''
 
     def execute(self, stack):

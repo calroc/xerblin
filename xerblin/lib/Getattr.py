@@ -3,7 +3,7 @@ from xerblin.util.stackcheckers import StackLen, StackType
 
 
 class Getattr(StackLen(2), StackType(0, basestring), ExecutableWord):
-    '''
+    '''getattr
     Implements getattr(object, name) => value
     '''
 

@@ -15,7 +15,8 @@ from webbrowser import open_new_tab
 
 
 class Open(StackLen(2), StackType(1, Object), ExecutableWord):
-    '''
+    '''open
+
     "open" the item on TOS.
 
 Takes two items, an Object (i.e. self) then the item to open.  The Object is needed because most of the time opening an item will mean opening a TextViewer and that requires a context Object.

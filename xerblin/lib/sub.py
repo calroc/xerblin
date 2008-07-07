@@ -3,8 +3,8 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class sub(StackLen(2), ExecutableWord):
-    '''
-    Subtract the integer on the top of the stack from the integer below it.
+    '''sub
+    Subtract the number on the top of the stack from the number below it.
     '''
 
     def execute(self, stack):

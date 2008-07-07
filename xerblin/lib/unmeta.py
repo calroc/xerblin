@@ -3,7 +3,7 @@ from xerblin.util.stackcheckers import StackLen
 
 
 class unmeta(StackLen(1), ExecutableWord):
-    '''
+    '''unmeta
     Take a list from the top of the stack and put it's contents on the stack.
     '''
 

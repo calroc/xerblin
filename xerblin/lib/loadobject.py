@@ -5,7 +5,7 @@ from xerblin.util.backtime import listBackupFiles, restorePrevious
 
 
 class ListHistory(ExecutableWord):
-    '''
+    '''ListHistory
     List the available save files.
     '''
     def execute(self, stack):
