@@ -42,6 +42,9 @@ class Variable(ModelMixin, ExecutableWord):
 
     def execute(self, stack): stack.insert(0, self)
 
+    def __repr__(self):
+        return "Variable %s = %r" % (self.name, self.value)
+
 
 class TypedVariable(Variable):
     '''
