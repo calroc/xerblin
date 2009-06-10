@@ -1,7 +1,9 @@
+MANIFEST
 MANIFEST.in
 README
 setup.py
 bin/xerblin
+bin/xerblin-fresh
 docs/HowToMakeGreatestCommonDenominator.txt
 docs/TODO
 docs/classes.txt
@@ -38,6 +40,7 @@ xerblin/lib/meta.py
 xerblin/lib/metas.py
 xerblin/lib/mod.py
 xerblin/lib/mul.py
+xerblin/lib/open.py
 xerblin/lib/over.py
 xerblin/lib/pick.py
 xerblin/lib/pop.py
@@ -72,7 +75,6 @@ xerblin/lib/widgets/controllerlistbox.py
 xerblin/lib/widgets/geometrybinder.py
 xerblin/lib/widgets/listwidgets.py
 xerblin/lib/widgets/widgetwrapper.py
-xerblin/lib/widgets/words.py
 xerblin/test/test.py
 xerblin/test/testControllerHistory.py
 xerblin/test/testMessaging.py
@@ -80,6 +82,7 @@ xerblin/test/testText.py
 xerblin/util/__init__.py
 xerblin/util/backtime.py
 xerblin/util/controller.py
+xerblin/util/fresh.py
 xerblin/util/log.py
 xerblin/util/mainapp.py
 xerblin/util/models.py

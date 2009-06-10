@@ -10,7 +10,12 @@ NewSeqWord    - Put a new sequential word on the stack
 makemacrosequence - Given a name and a list of words create a
     SequenceWord.
 '''
-from xerblin import ExecutableWord, SequentialExecutableWord
+from xerblin import (
+    ExecutableWord,
+    BranchExecutableWord,
+    LoopExecutableWord,
+    SequentialExecutableWord,
+    )
 from xerblin.util.stackcheckers import StackLen, StackType
 
 
