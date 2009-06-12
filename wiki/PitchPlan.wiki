@@ -74,8 +74,7 @@ email addy.
 
 Already there is an improvement we can offer my mom: make the email
 command able to tease out the three args from one string itself.  Then
-mom can just make one mouse gesture.  etc etc etc...  That'll be fifty
-cents pls mom... :D
+mom can just make one mouse gesture.  etc etc etc...
 
 You can extrapolate a lot from there I think, but the point is this:
 anytime user's using the computer and thinks "Hey, I wish it worked
@@ -98,8 +97,7 @@ content passing through it, routing new info to the nodes (people!)
 who can use it best, and promoting a sort of ferment of continuous UI
 improvement.  There's a lot more but I want to get to sleep soon. :D
 
-I'm rolling out xerby1 to my mom and sister probably this weekend.  I
-need to find more cheap or free machines that I can convert, plan and
+I need to find more cheap or free machines that I can convert, plan and
 host my first "tupperware party", get video gear to film both the
 party and my mom and sister learning and using the system, and finish
 up the actual software to the point where subjecting my nearest and
