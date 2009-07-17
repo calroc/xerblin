@@ -155,9 +155,6 @@ def MakeViewer(
         setGeometry=setGeometry(T),
         )
 
-    # Add in Vars for width, height, x, and y.
-    D.update(gb.dict_of_vars)
-
     # Create the Object.
     o = Object(dictionary=D)
 

@@ -56,7 +56,9 @@ Numbers => Open a TextViewer on their string representation.
         if self._isURL(S):
             open_new_tab(S)
         else:
-            self.openText(S[:25], Variable(S, S))
+            v = Variable(S)
+            v.value = S
+            self.openText(S[:25], v)
         self.handled = True
 
     def handleExecutableWord(self, word):
@@ -99,7 +101,9 @@ Numbers => Open a TextViewer on their string representation.
             else:
                 doc = word.__doc__
 
-            doc = word.doc = Variable(word.name, doc)
+            v = Variable(word.name)
+            v.value = doc
+            doc = word.doc = v
 
         self.openText(word.name + ' Doc', doc)
         self.handled = True
