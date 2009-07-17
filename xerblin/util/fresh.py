@@ -25,20 +25,12 @@ from xerblin.startup import startup_script
 from xerblin.lib.widgets.listwidgets import MakeViewer, SequenceController
 from xerblin.lib.guide import InscribeDocumentationWords
 from xerblin.util.mainapp import MainApp
-from xerblin.util.timed import Timed
-from xerblin.messaging import RootViewer, ModelMixin
 
 
 def fresh(T):
 
     # Create the world and populate it with the library's words.
     I = Object(name='Xerblin', dictionary=words)
-
-    # Create a time-delayed proxy caller to do nothing.
-    tm = Timed(T, lambda: None)
-
-    # Arrange to have it triggered on every NotifyMessage.
-    ModelMixin.root = RootViewer(None, lambda message: tm.trigger())
 
     app = MainApp(T, I)
 
