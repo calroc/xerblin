@@ -7,7 +7,7 @@ from xerblin import (
     )
 from xerblin.messaging import ListModel
 from xerblin.util.stackcheckers import StackLen, StackType
-from xerblin.util.models import Text
+from xerblin.messaging import Variable
 from xerblin.lib.widgets.widgetwrapper import MakeViewer
 from xerblin.lib.widgets.TextViewer import TextViewer
 
@@ -56,7 +56,7 @@ Numbers => Open a TextViewer on their string representation.
         if self._isURL(S):
             open_new_tab(S)
         else:
-            self.openText(S[:25], Text(S, S))
+            self.openText(S[:25], Variable(S, S))
         self.handled = True
 
     def handleExecutableWord(self, word):
@@ -99,7 +99,7 @@ Numbers => Open a TextViewer on their string representation.
             else:
                 doc = word.__doc__
 
-            doc = word.doc = Text(word.name, doc)
+            doc = word.doc = Variable(word.name, doc)
 
         self.openText(word.name + ' Doc', doc)
         self.handled = True

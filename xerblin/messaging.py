@@ -125,6 +125,30 @@ class ModelMixin:
         self.root.handle(message)
 
 
+class Variable(ModelMixin, ExecutableWord):
+    '''
+    Pushes itself onto the stack, use 'set' and 'get' to manipulate its value.
+    '''
+
+    def __init__(self, name):
+        ExecutableWord.__init__(self, name)
+        self.inner_value = None
+
+    def getValue(self):
+        return self.inner_value
+
+    def setValue(self, value):
+        self.inner_value = value
+        self.notify('set', (value,))
+
+    value = property(getValue, setValue)
+
+    def execute(self, stack): stack.insert(0, self)
+
+    def __repr__(self):
+        return "Variable %s = %r" % (self.name, self.value)
+
+
 class ListModel(ModelMixin, list):
     '''
     List that calls notify() when it's changed.

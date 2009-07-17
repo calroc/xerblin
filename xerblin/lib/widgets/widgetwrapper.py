@@ -171,10 +171,10 @@ def MakeViewer(
 
 if __name__ == "__main__":
     from Tkinter import mainloop
-    from xerblin.util.models import Text
+    from xerblin.messaging import Variable
     o = MakeViewer(
         'Demo XerblinWindow with TextViewer',
-        Text('hi', 'there'),
+        Variable('hi', 'there'),
         viewer_options=dict(interpreter=None),
         )
     mainloop()

@@ -1,8 +1,7 @@
 from xerblin import ExecutableWord, Object, SimpleInterpreter
 from xerblin.base import BracketedExecuteWord
 from xerblin.util.stackcheckers import StackLen, StackType
-from xerblin.messaging import ListModel
-from xerblin.util.models import Variable
+from xerblin.messaging import ListModel, Variable
 
 
 class createObject(ExecutableWord):
