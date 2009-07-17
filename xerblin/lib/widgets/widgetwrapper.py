@@ -20,7 +20,7 @@
 '''
 from Tkinter import Toplevel
 from xerblin import Object, ExecutableWord
-from xerblin.lib.constant import Constant
+from xerblin.lib.programming import Constant
 from xerblin.lib.widgets.geometrybinder import GeometryBinder
 from xerblin.lib.widgets.TextViewer import TextViewer
 from xerblin.util.stackcheckers import StackLen
