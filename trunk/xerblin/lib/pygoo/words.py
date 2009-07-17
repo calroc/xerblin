@@ -8,7 +8,6 @@ from xerblin.lib.widgets.widgetwrapper import (
     hide,
     setGeometry,
     )
-from xerblin.lib.widgets.geometrybinder import GeometryBinder
 from xerblin.util.stackcheckers import StackLen, StackType
 from xerblin.messaging import ListModel
 from xerblin.lib.programming import Variable
@@ -231,8 +230,6 @@ class WidgetsObject(Object):
                 D[name] = EntryHolder(name, self)
             else:
                 D[name] = WidgetHolder(name, self)
-
-        gb = GeometryBinder(top)
 
         # Add in Vars for width, height, x, and y.
         D.update(gb.dict_of_vars)
