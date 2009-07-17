@@ -130,7 +130,8 @@ def InscribeDocumentationWords(interpreter):
     for name, text in Documentation.iteritems():
 
         # Convert the string into a Variable word.
-        t = Variable(name, text)
+        t = Variable(name)
+        t.value = text
 
         # Build a fake stack for TV.
         stack = [t, interpreter]
