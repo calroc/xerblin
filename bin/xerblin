@@ -18,48 +18,23 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-This is a simple script to load the most recent Xerblin history pickle.
-
 '''
 from Tkinter import Tk, mainloop
 
-# Create Teh Tk instance right away so we're sure we have it.
+# Create Teh Tk instance right away so we're sure we have it (i.e. it's
+# not randomly given to some widget in the library or startup routines.)
 T = Tk()
 
 
-from xerblin import Object
-from xerblin.util.mainapp import MainApp
-from xerblin.util.backtime import (
-    attemptBackup,
-    listBackupFiles,
-    restorePrevious,
-    )
-from xerblin.util.timed import Timed
-from xerblin.messaging import RootViewer, ModelMixin
+# Begin the script proper.
+from xerblin.util.fresh import fresh
 
 
-# Get an indexed batch of the available saved files.
-D = dict(listBackupFiles())
-
-
-if D:
-    # It's alive! It's ALIVE!!
-    O = Object()
-
-    # Load up it's history..
-    restorePrevious(O, D[max(D)])
-
-    # Create a time-delayed proxy caller to attemptBackup()
-    tm = Timed(T, lambda: attemptBackup(O))
-    # Arrange to have it triggered on every NotifyMessage.
-    ModelMixin.root.save_function = lambda message: tm.trigger()
-
-    # Create the main app window in the Tk instance.
-    MainApp(T, O)
-
-else:
-    from xerblin.util.fresh import fresh
+def main():
     fresh(T)
+    # Go!
+    mainloop()
 
 
-mainloop()
+if __name__ == '__main__':
+    main()
