@@ -2,7 +2,7 @@
 Helper module for startup.  The basic Documentation words are defined here.
 '''
 from xerblin import ExecutableWord
-from xerblin.messaging import Variable
+from xerblin.lib.programming import Variable
 
 
 # This dict contains named documentation strings.  These strings will be made
