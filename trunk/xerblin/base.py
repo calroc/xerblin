@@ -115,11 +115,10 @@ class SimpleInterpreter:
         Given the name of an ExecutableWord in the dictionary (we hope,)
         Look up the word in self's dictionary and then execute it.
         """
-
-        if not word in self.dictionary: raise UnknownWordError(word)
-
-        eword = self.dictionary[word]
-
+        try:
+            eword = self.dictionary[word]
+        except KeyError:
+            raise UnknownWordError(word)
         self.execute_word(eword)
 
     def execute_word(self, eword):
@@ -314,12 +313,12 @@ class BranchExecutableWord(ExecutableWord):
 ####################################
 class SequentialExecutableWord(ExecutableWord, ListModel):
     """
-    SequentialExecutableWord - This class executes
-    its word0 and word1 one after the other. It doesn't
-    check the argument signatures of its child words.
+    SequentialExecutableWord - This class executes its words one after
+    the other. It doesn't check the argument signatures of its child
+    words.
 
     Public Methods:
-        execute - Execute self's word0 then word1.
+        execute - Execute self's words.
 
     """
 
