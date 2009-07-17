@@ -9,7 +9,7 @@ from xerblin.util.spark import (
     GenericParser,
     GenericASTTraversal,
     )
-from xerblin.lib.constant import Constant
+from xerblin.lib.programming import Constant
 
 
 class Token:

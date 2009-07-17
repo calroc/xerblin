@@ -15,6 +15,8 @@ from xerblin import (
     BranchExecutableWord,
     LoopExecutableWord,
     SequentialExecutableWord,
+    Object,
+    SimpleInterpreter,
     )
 from xerblin.util.stackcheckers import StackLen, StackType
 
@@ -35,6 +37,51 @@ class NewSeqWord(ExecutableWord):
     '''Put a new sequential word on the stack.'''
     def execute(self, stack):
         stack.insert(0, SequentialExecutableWord())
+
+    
+class setname(StackLen(2), StackType(0, basestring), ExecutableWord):
+    '''setname
+    Given an object on the stack and a string, set the 'name' attribute of the o
+    '''
+    def execute(self, stack):
+        name, obj = stack[:2]
+        setattr(obj, 'name', name)
+        stack.pop(0)
+
+
+class lookup(
+    StackLen(2),
+    StackType(0, basestring),
+    StackType(1, Object),
+    ExecutableWord
+    ):
+    '''lookup
+    Look up a word in the dictionary.  Requires an Object and a text string.
+    '''
+    def execute(self, stack):
+        '''Look up a word in the dictionary. Returns None if not found.'''
+        name, interp = stack[:2]
+        word = interp.dictionary.get(name)
+        stack[:2] = [word]
+
+
+class Inscribe(
+    StackLen(2),
+    StackType(0, SimpleInterpreter),
+    StackType(1, ExecutableWord),
+    ExecutableWord):
+    '''Inscribe
+    Inscribe a named word into the dictionary, if there isn't already one with t
+    '''
+    def execute(self, stack):
+        interpreter, word = stack[:2]
+        name = word.name
+
+        if name in interpreter.dictionary:
+            print '%s already exists in Dictionary.' % name
+        else:
+            interpreter.dictionary[name] = word
+            stack[:2] = [name]
 
 
 class makemacrosequence(

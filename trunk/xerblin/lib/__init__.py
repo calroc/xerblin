@@ -33,8 +33,7 @@ from xerblin import (
     Object,
     )
 from xerblin.util.log import log
-from xerblin.lib.constant import Constant
-from xerblin.lib.variable import Variable
+from xerblin.lib.programming import Constant, Variable
 from xerblin.lib.guide import Text
 
 

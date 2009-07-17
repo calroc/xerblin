@@ -1,7 +1,7 @@
 import Tkinter
 from pygoo import toXML, _merge_subelements_to_options, _grid
 from xerblin import Object, ExecutableWord
-from xerblin.lib.constant import Constant
+from xerblin.lib.programming import Constant
 from xerblin.lib.widgets.widgetwrapper import (
     XerblinWindow,
     show,
