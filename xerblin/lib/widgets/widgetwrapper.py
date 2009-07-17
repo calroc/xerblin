@@ -21,7 +21,6 @@
 from Tkinter import Toplevel
 from xerblin import Object, ExecutableWord
 from xerblin.lib.programming import Constant
-from xerblin.lib.widgets.geometrybinder import GeometryBinder
 from xerblin.lib.widgets.TextViewer import TextViewer
 from xerblin.util.stackcheckers import StackLen
 
@@ -147,9 +146,6 @@ def MakeViewer(
     # Create the viewer inside our window.
     viewer = ViewerClass(model, T, **viewer_options)
 
-    # "Hook" the geometry of the window to some xerblin vars.
-    gb = GeometryBinder(T)
-
     # Build an initial dictionary for our new Object.
     D = dict(
         model=Constant('model', model),
@@ -164,7 +160,6 @@ def MakeViewer(
 
     # Create the Object.
     o = Object(dictionary=D)
-    o.gb = gb # Don't let's garbage collect the GeometryBinder, eh what?
 
     return o
 
