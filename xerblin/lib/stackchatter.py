@@ -1,5 +1,6 @@
 from xerblin import ExecutableWord
 from xerblin.util.stackcheckers import StackLen, StackType
+from xerblin.messaging import ListModel
 
 
 class drop(StackLen(1), ExecutableWord):
@@ -64,7 +65,7 @@ class swap(StackLen(2), ExecutableWord):
 
 class tuck(StackLen(2), ExecutableWord):
     '''tuck
-    Take the top item on the stack and tuck a copy of it under the second item o
+    Take the top item on the stack and tuck a copy of it under the second item on the stack.
     '''
 
     def execute(self, stack):
@@ -98,7 +99,7 @@ class unmeta(StackLen(1), ExecutableWord):
         except TypeError, e:
 
             if str(e) == 'iteration over non-sequence':
-                raise AssertionError, "the second item down in the Stack isn't a
+                raise AssertionError, "the second item down in the Stack isn't a sequence."
 
             else:
                 raise e
