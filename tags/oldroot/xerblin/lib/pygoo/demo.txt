@@ -1,0 +1,52 @@
+label
+    text = "A Simple Demo Widget"
+    sticky = nsew row = 0 columnspan = 2 .
+button
+    text = "List Words"
+name = aaanamey
+    command = "self words unmeta" 
+    sticky = nsew row = 1 column = 0 .
+button
+    text = "List Words of TOS"
+    command = "words unmeta" 
+    sticky = nsew row = 1 column = 1 .
+button
+    text = "New List"
+    command = "meta meta pop swap push unmeta"
+    sticky = nsew row = 2 column = 0 .
+button
+    text = "New Sequence Word"
+    command = "NewSeqWord"
+    sticky = nsew row = 2 column = 1 .
+
+button
+    text = "drop"
+    command = "drop"
+    sticky = nsew row = 3 column = 0 .
+button
+    text = "drop all"
+    command = "meta drop"
+    sticky = nsew row = 3 column = 1 .
+
+=======================================================================
+self swap makewidgets "menu" variable tuck swap set self Inscribe drop
+menu get "iconifyToggle" lookup NewSeqWord swap push "showmenu" setname
+self Inscribe drop
+=======================================================================
+
+button text = "I do nothing" name=nada sticky = nsew row = 1 column = 1 .
+
+button text = "I do nothing" name=nada .
+
+makewidgets "nothing" constant self Inscribe drop nothing
+
+words unmeta
+
+
+=======--==============--===========--==============--========--===========
+self "widget-window-name" lookup  # get an Inscribe'd Object
+     "button-name" lookup         # pull out it's button Constant
+     "value" getattr              # get the actual button widget
+
+"text" "dup" setitem              # set its text and command strings
+"command" "dup" setitem drop      # behind the scenes a CommandWrapper handles the text-to-function stuff..
