@@ -10,8 +10,7 @@ from xerblin.lib.widgets.widgetwrapper import (
     )
 from xerblin.lib.widgets.geometrybinder import GeometryBinder
 from xerblin.util.stackcheckers import StackLen, StackType
-from xerblin.messaging import ListModel
-from xerblin.util.models import Text
+from xerblin.messaging import ListModel, Variable
 from xerblin.lib.pygoo.wrappers import (
     GraphWrapper,
     CommandWrapper,
@@ -242,7 +241,7 @@ class WidgetsObject(Object):
 
 class makewidgets(
     StackLen(2),
-    StackType(0, (str, Text, ListModel)),
+    StackType(0, (str, Variable, ListModel)),
     StackType(1, Object),
     ExecutableWord
     ):
@@ -258,7 +257,7 @@ class makewidgets(
     def _source(self, source):
         if isinstance(source, str):
             return source
-        if isinstance(source, Text):
+        if isinstance(source, Variable):
             return source.value
         if isinstance(source, ListModel):
             G = (self._source(thing) for thing in source)

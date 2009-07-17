@@ -2,7 +2,7 @@
 Helper module for startup.  The basic Documentation words are defined here.
 '''
 from xerblin import ExecutableWord
-from xerblin.util.models import Text
+from xerblin.messaging import Variable
 
 
 # This dict contains named documentation strings.  These strings will be made
@@ -129,8 +129,8 @@ def InscribeDocumentationWords(interpreter):
 
     for name, text in Documentation.iteritems():
 
-        # Convert the string into a Text var word.
-        t = Text(name, text)
+        # Convert the string into a Variable word.
+        t = Variable(name, text)
 
         # Build a fake stack for TV.
         stack = [t, interpreter]

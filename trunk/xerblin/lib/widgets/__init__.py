@@ -1,7 +1,6 @@
 from xerblin import ExecutableWord, SimpleInterpreter
-from xerblin.messaging import ListModel
+from xerblin.messaging import ListModel, Variable
 from xerblin.util.stackcheckers import StackLen, StackType
-from xerblin.util.models import Text
 from xerblin.lib.widgets.widgetwrapper import MakeViewer
 from xerblin.lib.widgets.listwidgets import (
     ViewerMakerMixin,
@@ -40,7 +39,7 @@ class listviewer(
 
 class textviewer(
     StackLen(2),
-    StackType(0, (Text, basestring)),
+    StackType(0, (Variable, basestring)),
     StackType(1, SimpleInterpreter),
     ExecutableWord
     ):
@@ -96,8 +95,8 @@ Pop/Paste TOS = Middle, Right
     '''
     def execute(self, stack):
         model, interpreter = stack[:2]
-        if not isinstance(model, Text):
-            model = Text('noname', str(model))
+        if not isinstance(model, Variable):
+            model = Variable('noname', str(model))
         name = "TextViewer %s" % (id(model),)
         viewer = MakeViewer(
             name,
@@ -110,11 +109,11 @@ Pop/Paste TOS = Middle, Right
 
 class s2t(StackLen(1), StackType(0, str), ExecutableWord):
     '''
-    Convert a string to a Text.
+    Convert a string to a Variable.
     '''
     def execute(self, stack):
         s = stack[0]
-        p = Text('noname', s)
+        p = Variable('noname', s)
         stack[0] = p
 
 
