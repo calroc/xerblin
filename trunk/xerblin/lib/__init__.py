@@ -34,7 +34,6 @@ from xerblin import (
     )
 from xerblin.util.log import log
 from xerblin.lib.programming import Constant, Variable
-from xerblin.lib.guide import Text
 
 
 # Don't load these modules.
@@ -54,7 +53,6 @@ exclude_word_classes = set((
     Object,
     Constant,
     Variable,
-    Text,
     ))
 
 

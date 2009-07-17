@@ -10,7 +10,8 @@ from xerblin.lib.widgets.widgetwrapper import (
     )
 from xerblin.lib.widgets.geometrybinder import GeometryBinder
 from xerblin.util.stackcheckers import StackLen, StackType
-from xerblin.messaging import ListModel, Variable
+from xerblin.messaging import ListModel
+from xerblin.lib.programming import Variable
 from xerblin.lib.pygoo.wrappers import (
     GraphWrapper,
     CommandWrapper,

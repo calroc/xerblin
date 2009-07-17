@@ -1,5 +1,6 @@
 from xerblin import ExecutableWord, SimpleInterpreter
-from xerblin.messaging import ListModel, Variable
+from xerblin.messaging import ListModel
+from xerblin.lib.programming import Variable
 from xerblin.util.stackcheckers import StackLen, StackType
 from xerblin.lib.widgets.widgetwrapper import MakeViewer
 from xerblin.lib.widgets.listwidgets import (
