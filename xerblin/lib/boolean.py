@@ -2,6 +2,22 @@ from xerblin import ExecutableWord
 from xerblin.util.stackcheckers import StackLen
 
 
+class true(ExecutableWord):
+    '''true
+    Push Boolean true onto the stack.
+    '''
+    def execute(self, stack):
+        stack.insert(0, True)
+
+
+class false(ExecutableWord):
+    '''false
+    Push Boolean false onto the stack.
+    '''
+    def execute(self, stack):
+        stack.insert(0, False)
+
+
 class boolean(StackLen(1), ExecutableWord):
     '''boolean
     Replace the top item on the stack with its Boolean value.
