@@ -20,7 +20,8 @@ startup_script = (
 
     # Show the first Guide and set it's x coordinate.
     ''' "show" Guide '''
-#    ''' self "Guide" lookup "x" lookup 273 set '''
+    ''' 880 800 0 273 meta '''
+    ''' self "Guide" lookup "setGeometry" lookup InvokeWord '''
 
     # Create the words in the built-in word "GuideWords".
     # (GuideWords is defined in lib/guide.py.)
