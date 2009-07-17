@@ -122,3 +122,13 @@ class dotess(ExecutableWord):
 
     def execute(self, stack):
         print stack
+
+
+class emit(ExecutableWord):
+    '''emit
+    Print TOS, and drop it.
+    '''
+
+    def execute(self, stack):
+        print stack[0]
+        del stack[0]
