@@ -12,6 +12,55 @@ class createObject(ExecutableWord):
         stack.insert(0, Object(stack=ListModel()))
 
 
+class Getattr(StackLen(2), StackType(0, basestring), ExecutableWord):
+    '''getattr
+    Implements getattr(object, name) => value
+    '''
+
+    __name__ = 'getattr'
+
+    def execute(self, stack):
+        name, obj = stack[:2]
+        value = getattr(obj, name)
+        stack[:2] = [value]
+
+
+class Setattr(StackLen(3), StackType(1, basestring), ExecutableWord):
+    '''setattr
+    Implments setattr(object, name, value)
+    '''
+
+    __name__ = 'setattr'
+
+    def execute(self, stack):
+        obj, name, value = stack[2::-1]
+        setattr(obj, name, value)
+        del stack[:3]
+
+
+class getitem(StackLen(2), ExecutableWord):
+    '''getitem
+    Given an object and key on the stack return object[key].
+    '''
+    def execute(self, stack):
+        key, obj = stack[:2]
+        value = obj.__getitem__(key)
+        stack[:2] = [value]
+
+
+class setitem(StackLen(3), ExecutableWord):
+    '''setitem
+    Given an object, key and value on the stack do:
+        object[key] = value
+
+    key and value are consumed, but object remains on the stack.
+    '''
+    def execute(self, stack):
+        obj, key, value = stack[2::-1]
+        obj.__setitem__(key, value)
+        del stack[:2]
+
+
 class Constant(ExecutableWord):
     #
     # Push a constant value onto the stack.
