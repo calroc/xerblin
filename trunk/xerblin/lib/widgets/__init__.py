@@ -97,7 +97,9 @@ Pop/Paste TOS = Middle, Right
     def execute(self, stack):
         model, interpreter = stack[:2]
         if not isinstance(model, Variable):
-            model = Variable('noname', str(model))
+            v = Variable('noname')
+            v.value = str(model)
+            model = v
         name = "TextViewer %s" % (id(model),)
         viewer = MakeViewer(
             name,
@@ -114,7 +116,8 @@ class s2t(StackLen(1), StackType(0, str), ExecutableWord):
     '''
     def execute(self, stack):
         s = stack[0]
-        p = Variable('noname', s)
+        p = Variable('noname')
+        p.value = s
         stack[0] = p
 
 
