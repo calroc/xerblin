@@ -22,7 +22,7 @@
 from xerblin.lib import words
 from xerblin import Object
 from xerblin.startup import startup_script
-from xerblin.lib.widgets.listwidgets import MakeViewer, SequenceController
+from xerblin.lib.widgets.listwidgets import makeViewer, SequenceController
 from xerblin.lib.guide import InscribeDocumentationWords
 from xerblin.util.mainapp import MainApp
 
@@ -36,7 +36,7 @@ def fresh(T):
 
     # By default ALWAYS open a ListViewer (i.e. SequenceController) on
     # the world's Stack.
-    I.dictionary['StackViewer'] = MakeViewer(
+    I.dictionary['StackViewer'] = makeViewer(
         "Xerblin Stack",    # name
         I.stack,            # model
         SequenceController, # viewer/controller class
