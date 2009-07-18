@@ -263,10 +263,3 @@ class SequenceController(SequenceViewer):
         AbstractSequenceViewer.__init__(self, model)
         ModelMixin.root.addChild(self)
 
-
-class ViewerMakerMixin:
-
-    def _makeViewer(self, model, name, class_=SequenceViewer):
-        viewer = MakeViewer(name, model, class_)
-        return viewer
-

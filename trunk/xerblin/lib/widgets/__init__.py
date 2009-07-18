@@ -1,12 +1,29 @@
+'''
+    Copyright (C) 2004 - 2009 Simon Forman
+
+    This file is part of Xerblin.
+
+    Xerblin is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+'''
 from xerblin import ExecutableWord, SimpleInterpreter
 from xerblin.messaging import ListModel
 from xerblin.lib.programming import Variable
 from xerblin.util.stackcheckers import StackLen, StackType
 from xerblin.lib.widgets.widgetwrapper import MakeViewer
-from xerblin.lib.widgets.listwidgets import (
-    ViewerMakerMixin,
-    SequenceController,
-    )
+from xerblin.lib.widgets.listwidgets import SequenceController
 from xerblin.lib.widgets.TextViewer import TextViewer
 
 
@@ -24,7 +41,6 @@ class getstack(
 
 
 class listviewer(
-    ViewerMakerMixin,
     StackLen(1),
     StackType(0, ListModel),
     ExecutableWord
@@ -35,7 +51,7 @@ class listviewer(
     def execute(self, stack):
         model = stack[0]
         name = "ListViewer %s" % (id(model),)
-        stack[0] = self._makeViewer(model, name, SequenceController)
+        stack[0] = MakeViewer(name, model, SequenceController)
 
 
 class textviewer(
