@@ -21,7 +21,6 @@
 from Tkinter import BOTH, Listbox, SINGLE
 from Tkdnd import dnd_start
 from xerblin.messaging import ModelMixin, Viewer, ListModel
-from xerblin.lib.widgets.widgetwrapper import MakeViewer
 
 
 class SourceWrapper:
