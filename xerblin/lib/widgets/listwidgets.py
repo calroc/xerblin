@@ -24,43 +24,6 @@ from xerblin.messaging import ModelMixin, Viewer, ListModel
 from xerblin.lib.widgets.widgetwrapper import MakeViewer
 
 
-type_descriptors = {
-    str:     'string:',
-    unicode: 'Unicode:',
-    int:     'int:',
-    float:   'float:',
-    list:    'list:',
-    dict:    'dict:',
-    tuple:   'tuple:'
-    }
-other = 'other:'
-
-
-_longest = max(map(len, type_descriptors.values() + [other]))
-
-#Create our format string.
-fmt = '%%-%is %%s' % _longest
-
-
-def _format(n):
-    '''
-    Return a string with a type and description of n.
-    '''
-    type_name = type_descriptors.get(type(n))
-    if not type_name:
-        try:
-            type_name = n.__class__.__name__
-            type_name = type_name[:_longest - 3] + '..:'
-        except AttributeError:
-            type_name = other
-    return fmt % (type_name, n)
-
-
-def stack2view(stack):
-    # Get up to 100 chars of each formated version of stack's contents.
-    return [n[:100] for n in map(_format, stack)]
-
-
 class SourceWrapper:
     '''
     Helper object for drag and drop.
@@ -218,6 +181,22 @@ class AbstractSequenceViewer(Viewer):
 
 class SequenceViewer(AbstractSequenceViewer):
 
+    type_descriptors = {
+        str:     'string:',
+        unicode: 'Unicode:',
+        int:     'int:',
+        float:   'float:',
+        list:    'list:',
+        dict:    'dict:',
+        tuple:   'tuple:'
+        }
+    other = 'other:'
+
+    _longest = max(map(len, type_descriptors.values() + [other]))
+
+    #Create our format string.
+    fmt = '%%-%is %%s' % _longest
+
     def __init__(self, model, tkparent=None, parent=None, **kw):
         kw['items'] = model
         kw.setdefault('width', 55)
@@ -227,6 +206,23 @@ class SequenceViewer(AbstractSequenceViewer):
         if parent is None:
             parent = ModelMixin.root
         parent.addChild(self)
+
+    def _format(self, n):
+        '''
+        Return a string with a type and description of n.
+        '''
+        type_name = self.type_descriptors.get(type(n))
+        if not type_name:
+            try:
+                type_name = n.__class__.__name__
+                type_name = type_name[:self._longest - 3] + '..:'
+            except AttributeError:
+                type_name = self.other
+        return self.fmt % (type_name, n)
+
+    def _stack2view(self, stack):
+        # Get up to 100 chars of each formated version of stack's contents.
+        return [n[:100] for n in map(self._format, stack)]
 
     def update(self, kc=None):
         '''
@@ -239,7 +235,7 @@ class SequenceViewer(AbstractSequenceViewer):
 
         super(SequenceViewer, self).update(kc)
 
-        stack = stack2view(self.model)
+        stack = self._stack2view(self.model)
 
         #Get rid of the old contents.
         self.lb.delete(0, 'end')
