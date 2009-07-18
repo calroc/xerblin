@@ -39,8 +39,6 @@ from xerblin.lib.programming import Constant, Variable
 # Don't load these modules.
 exclude = [
     '__init__.py',
-    'skeletonlib.py',
-    'metas.py',
     ]
 
 
