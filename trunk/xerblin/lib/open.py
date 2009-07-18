@@ -9,7 +9,7 @@ from xerblin.messaging import ListModel
 from xerblin.util.stackcheckers import StackLen, StackType
 from xerblin.lib.programming import Variable
 from xerblin.lib.widgets.widgetwrapper import makeViewer
-from xerblin.lib.widgets.TextViewer import TextViewer
+from xerblin.lib.widgets.textviewer import TextViewer
 
 from webbrowser import open_new_tab
 

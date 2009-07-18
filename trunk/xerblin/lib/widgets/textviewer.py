@@ -545,7 +545,6 @@ class TextViewerWidget(Text, mousebindingsmixin):
         word = self.interpreter.dictionary.get(self.command, self.command)
 
         self.interpreter.stack.insert(0, word)
-#        self.interpreter.stack[:0] = [word, self.interpreter]
         self.interpreter.interpret("open")
 
     def lookup(self, event):
@@ -636,8 +635,6 @@ class TextViewerWidget(Text, mousebindingsmixin):
             if self._dying:
                 self.interpreter.stack.insert(0, self._dying)
                 del self._dying
-
-##            self.interpreter.windows.remove(self)
 
         return f
 
