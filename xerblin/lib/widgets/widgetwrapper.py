@@ -21,7 +21,7 @@
 from Tkinter import Toplevel
 from xerblin import Object, ExecutableWord
 from xerblin.lib.programming import Constant
-from xerblin.lib.widgets.TextViewer import TextViewer
+from xerblin.lib.widgets.textviewer import TextViewer
 from xerblin.util.stackcheckers import StackLen
 
 

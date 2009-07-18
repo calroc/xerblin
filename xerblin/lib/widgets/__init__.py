@@ -24,7 +24,7 @@ from xerblin.lib.programming import Variable
 from xerblin.util.stackcheckers import StackLen, StackType
 from xerblin.lib.widgets.widgetwrapper import makeViewer
 from xerblin.lib.widgets.listwidgets import SequenceController
-from xerblin.lib.widgets.TextViewer import TextViewer
+from xerblin.lib.widgets.textviewer import TextViewer
 
 
 class listviewer(
