@@ -8,7 +8,7 @@ from xerblin import (
 from xerblin.messaging import ListModel
 from xerblin.util.stackcheckers import StackLen, StackType
 from xerblin.lib.programming import Variable
-from xerblin.lib.widgets.widgetwrapper import MakeViewer
+from xerblin.lib.widgets.widgetwrapper import makeViewer
 from xerblin.lib.widgets.TextViewer import TextViewer
 
 from webbrowser import open_new_tab
@@ -84,9 +84,9 @@ Numbers => Open a TextViewer on their string representation.
             # desired.  This will require some nice way to add docs to
             # words made by makewords... *sigh*.  If you're making words
             # in a script and you want to add a doc attr you can use the
-            # s2t word to turn a string into a Text, then set that as the
-            # word's doc attr using the setattr word.  Now if only there
-            # were a good way to make strings in a script...
+            # variable word to put the string in a variable, then set
+            # that as the word's doc attr using the setattr word.  Now if
+            # only there were a good way to make strings in a script...
             if isinstance(word, (
                 BranchExecutableWord,
                 LoopExecutableWord,
@@ -110,7 +110,7 @@ Numbers => Open a TextViewer on their string representation.
 
     def openText(self, name, text):
         # Make, and throw away, a TextViewer for the doc object.
-        MakeViewer(
+        makeViewer(
             name,
             text,
             TextViewer,

@@ -104,7 +104,7 @@ makewidgets
 
 Misc
 ----------------------------------
-demotext emit s2t sys.exit
+demotext emit sys.exit
 
 OS Words
 ----------------------------------

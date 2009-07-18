@@ -126,20 +126,8 @@ Pop/Paste TOS = Middle, Right
         stack[:2] = [viewer]
 
 
-class s2t(StackLen(1), StackType(0, str), ExecutableWord):
-    '''
-    Convert a string to a Variable.
-    '''
-    def execute(self, stack):
-        s = stack[0]
-        p = Variable('noname')
-        p.value = s
-        stack[0] = p
-
-
 __all__ = [
     'getstack',
     'listviewer',
     'textviewer',
-    's2t',
     ]
