@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 '''
-from Tkinter import Toplevel, BOTH, Listbox, SINGLE
+from Tkinter import BOTH, Listbox, SINGLE
 from Tkdnd import dnd_start
 from xerblin.messaging import ModelMixin, Viewer, ListModel
 from xerblin.lib.widgets.widgetwrapper import MakeViewer
