@@ -27,19 +27,6 @@ from xerblin.lib.widgets.listwidgets import SequenceController
 from xerblin.lib.widgets.TextViewer import TextViewer
 
 
-class getstack(
-    StackLen(1),
-    StackType(0, SimpleInterpreter),
-    ExecutableWord
-    ):
-    '''
-    Given an Interpreter on the stack get its stack.
-    '''
-    def execute(self, stack):
-        interpreter = stack[0]
-        stack[0] = interpreter.stack
-
-
 class listviewer(
     StackLen(1),
     StackType(0, ListModel),
@@ -127,7 +114,6 @@ Pop/Paste TOS = Middle, Right
 
 
 __all__ = [
-    'getstack',
     'listviewer',
     'textviewer',
     ]
