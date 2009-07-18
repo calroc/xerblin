@@ -22,7 +22,7 @@ from xerblin import ExecutableWord, SimpleInterpreter
 from xerblin.messaging import ListModel
 from xerblin.lib.programming import Variable
 from xerblin.util.stackcheckers import StackLen, StackType
-from xerblin.lib.widgets.widgetwrapper import MakeViewer
+from xerblin.lib.widgets.widgetwrapper import makeViewer
 from xerblin.lib.widgets.listwidgets import SequenceController
 from xerblin.lib.widgets.TextViewer import TextViewer
 
@@ -51,7 +51,7 @@ class listviewer(
     def execute(self, stack):
         model = stack[0]
         name = "ListViewer %s" % (id(model),)
-        stack[0] = MakeViewer(name, model, SequenceController)
+        stack[0] = makeViewer(name, model, SequenceController)
 
 
 class textviewer(
@@ -117,7 +117,7 @@ Pop/Paste TOS = Middle, Right
             v.value = str(model)
             model = v
         name = "TextViewer %s" % (id(model),)
-        viewer = MakeViewer(
+        viewer = makeViewer(
             name,
             model,
             TextViewer,

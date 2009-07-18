@@ -35,7 +35,7 @@ class XerblinWindow(Toplevel):
     reopened by calling the show method.
 
     This window class is used by the Viewer classes as a frame (see the
-    MakeViewer() function) and ExecutableWords are created to call those
+    makeViewer() function) and ExecutableWords are created to call those
     show and hide methods, and to change the geometry of the window. 
     '''
 
@@ -120,7 +120,7 @@ class setGeometry(StackLen(1), ExecutableWord):
         self.window.update_idletasks()
 
 
-def MakeViewer(
+def makeViewer(
     title,
     model,
     ViewerClass=TextViewer,
@@ -164,7 +164,7 @@ def MakeViewer(
 if __name__ == "__main__":
     from Tkinter import mainloop
     from xerblin.lib.programming import Variable
-    o = MakeViewer(
+    o = makeViewer(
         'Demo XerblinWindow with TextViewer',
         Variable('hi', 'there'),
         viewer_options=dict(interpreter=None),
