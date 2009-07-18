@@ -1,3 +1,23 @@
+'''
+    Copyright (C) 2004 - 2009 Simon Forman
+
+    This file is part of Xerblin.
+
+    Xerblin is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+'''
 from xerblin import ExecutableWord, Object, SimpleInterpreter
 from xerblin.base import BracketedExecuteWord
 from xerblin.util.stackcheckers import StackLen, StackType
@@ -10,6 +30,19 @@ class createObject(ExecutableWord):
     '''
     def execute(self, stack):
         stack.insert(0, Object(stack=ListModel()))
+
+
+class getstack(
+    StackLen(1),
+    StackType(0, SimpleInterpreter),
+    ExecutableWord
+    ):
+    '''
+    Given an Interpreter on the stack get its stack.
+    '''
+    def execute(self, stack):
+        interpreter = stack[0]
+        stack[0] = interpreter.stack
 
 
 class Getattr(StackLen(2), StackType(0, basestring), ExecutableWord):
