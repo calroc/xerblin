@@ -22,7 +22,8 @@
 from xerblin.lib import words
 from xerblin import Object
 from xerblin.startup import startup_script
-from xerblin.lib.widgets.listwidgets import makeViewer, SequenceController
+from xerblin.lib.widgets.listwidgets import SequenceController
+from xerblin.lib.widgets.widgetwrapper import makeViewer
 from xerblin.lib.guide import InscribeDocumentationWords
 from xerblin.util.mainapp import MainApp
 
