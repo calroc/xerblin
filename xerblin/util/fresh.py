@@ -21,7 +21,8 @@
 '''
 from xerblin.lib import words
 from xerblin import Object
-from xerblin.startup import startup_script
+from xerblin.startup import startup_script, word_source
+from xerblin.documentation import docs
 from xerblin.lib.widgets.listwidgets import SequenceController
 from xerblin.lib.widgets.widgetwrapper import makeViewer
 from xerblin.lib.programming import Variable
@@ -48,6 +49,10 @@ def fresh(T):
 
     I.interpret(startup_script)
 
+    if 'makewords' in I.dictionary:
+        I.stack.extend((word_source, I))
+        I.interpret('makewords drop')
+
 
 def InscribeDocumentationWords(interpreter):
     '''
@@ -56,8 +61,10 @@ def InscribeDocumentationWords(interpreter):
     It's only used in the main xerblin script.
     '''
     TV = interpreter.dictionary.get('textviewer')
+    if not TV:
+        return
 
-    for name, text in Documentation.iteritems():
+    for name, text in docs.iteritems():
 
         # Convert the string into a Variable word.
         t = Variable(name)

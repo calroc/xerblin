@@ -4,6 +4,8 @@
 
 # If you're looking for the place where the StackViewer and the Close
 # Button are created, that's in the bin/xerblin script.
+from xerblin.documentation import docs
+
 
 startup_script = (
 
@@ -22,9 +24,32 @@ startup_script = (
     ''' "show" Guide '''
     ''' 880 800 0 273 meta '''
     ''' self "Guide" lookup "setGeometry" lookup InvokeWord '''
+)
 
-    # Create the words in the built-in word "GuideWords".
-    # (GuideWords is defined in lib/guide.py.)
-    '''self GuideWords makewords drop '''
 
+word_source = '''
+
+    * Stack = "show" StackViewer
+    * new-list = meta meta pop swap push unmeta
+    * new-text = texts self "" textviewer push drop
+    * save = meta scratchpad swap push drop
+
+      t = pop swap drop unmeta
+      i & t Nop
+    * restore = scratchpad dup i
+
+    * drop-all = meta drop
+    * open = self swap open
+    * Words = self dup words textviewer drop
+
+    ''' + ''.join(
+
+    # For each of the Documentation TextViewers, replace it with a
+    # SeqWord that shows the textviewer.  This essentially makes the name
+    # of the viewer open it.  To get the viewer you must Evoke the
+    # SeqWord and pick out its trailing component (the textviewer
+    # object.)
+
+    ' * %s = "show" %s ' % (n, n)
+    for n in docs
 )
