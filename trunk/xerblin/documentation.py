@@ -1,14 +1,11 @@
 '''
 Helper module for startup.  The basic Documentation words are defined here.
 '''
-from xerblin import ExecutableWord
 
-
-# This dict contains named documentation strings.  These strings will be made
+# This module contains named documentation strings.  These strings will be made
 # into TextViewers in the main interpreter.
-Documentation = dict(
 
-    Guide = '''Welcome to Xerblin
+Guide = '''Welcome to Xerblin
     
     This is the Guide.  You can close this textviewer and then open it again later by right-clicking on the word Guide in any textviewer.  You can also reopen this Guide by using the "Open Guide" button on the Xerblin main window.
 
@@ -37,9 +34,10 @@ Paste TOS = Middle, Left
 Pop/Paste TOS = Middle, Right
 
 (TOS means "Top Of Stack", i.e. the item on the top of the Stack.)
-''',
+'''
 
-    WordList = '''WordList
+
+WordList = '''WordList
 
 Basic Words
 ==================================
@@ -113,42 +111,10 @@ Time Words
 ----------------------------------
 time timedate
 
-''',
+'''
 
+docs = dict(
+    (k, v)
+    for k, v in globals().items()
+    if not k.startswith('_')
     )
-
-
-class GuideWords(ExecutableWord):
-    '''
-    A helper word to let the startup script create these words at runtime.
-    Basically this is a hard-coded string constant.
-    '''
-
-    word_source = '''
-
-        * Stack = "show" StackViewer
-        * new-list = meta meta pop swap push unmeta
-        * new-text = texts self "" textviewer push drop
-        * save = meta scratchpad swap push drop
-
-          t = pop swap drop unmeta
-          i & t Nop
-        * restore = scratchpad dup i
-
-        * drop-all = meta drop
-        * open = self swap open
-        * Words = self dup words textviewer drop
-
-    ''' + ''.join(
-    # For each of the Documentation TextViewers, replace it with a SeqWord
-    # that shows the textviewer.  This essentially makes the name of the
-    # viewer open it.  To get the viewer you must Evoke the SeqWord and pick
-    # out its trailing component (the textviewer object.)
-    ' * %s = "show" %s ' % (n, n)
-    for n in Documentation
-    )
-
-    def execute(self, stack):
-        stack.insert(0, self.word_source)
-
-
