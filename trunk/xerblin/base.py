@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
     Xerblin - A User Interface
-    Copyright (C) 2004, 2005, 2006 Simon Forman.
+    Copyright (C) 2004-2009 Simon Forman.
 
     Xerblin is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
