@@ -1,6 +1,5 @@
 from xerblin import ExecutableWord
 from xerblin.util.stackcheckers import StackLen, StackHasAttr
-from xerblin.messaging import ListModel
 
 
 class reverse(StackLen(1), ExecutableWord):
