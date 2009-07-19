@@ -47,3 +47,33 @@ def fresh(T):
     InscribeDocumentationWords(I)
 
     I.interpret(startup_script)
+
+
+def InscribeDocumentationWords(interpreter):
+    '''
+    This helper function takes the above Documentation dict and converts
+    it into textviewer objects in the interpreter's dictionary.
+    It's only used in the main xerblin script.
+    '''
+    TV = interpreter.dictionary.get('textviewer')
+
+    for name, text in Documentation.iteritems():
+
+        # Convert the string into a Variable word.
+        t = Variable(name)
+        t.value = text
+
+        # Build a fake stack for TV.
+        stack = [t, interpreter]
+
+        # Make the textviewer Object.
+        TV.execute(stack)
+        T = stack[0]
+
+        # Set the name.
+        T.name = name
+
+        T.dictionary['hide'].execute([])
+
+        # "Inscribe" the word.
+        interpreter.dictionary[name] = T
