@@ -57,28 +57,17 @@ Pop/Paste TOS = Middle, Right
 
 WordList = '''WordList
 
-Basic Words
-==================================
-
 Stack Words
 ----------------------------------
 drop dup over pick
 rot swap tuck
 
-Math Words
+Math and Logic Words
 ----------------------------------
-add div mod
-mul sub
-
-Logic Words
-----------------------------------
-and boolean
-false not or
-true
-
-
-Advanced Words
-==================================
+add sub
+mul div mod
+and or
+true false not boolean
 
 Programming Words
 ----------------------------------
@@ -91,42 +80,23 @@ Object Words
 createObject execute getstack
 Inscribe lookup self
 warranty words
-
-Special Words
-----------------------------------
+setname
 getattr getitem
-setattr setitem setname
+setattr setitem
 
 List Words
 ----------------------------------
 meta unmeta
 pop push
 
-
-Additional Words
-==================================
-
-Animation Words
-----------------------------------
-attach run timeframe
-cosinedelta cubicdelta
-quadraticdelta sinedelta
-
 GUI Words
 ----------------------------------
 listviewer textviewer
-makewidgets
 
-Misc
+Misc. Words
 ----------------------------------
-demotext emit sys.exit
-
-OS Words
-----------------------------------
+emit sys.exit
 find ls pwd
-
-Time Words
-----------------------------------
 time timedate
 
 '''

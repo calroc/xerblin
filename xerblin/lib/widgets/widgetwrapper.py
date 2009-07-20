@@ -1,5 +1,5 @@
 '''
-    Copyright (C) 2004 - 2008 Simon Forman
+    Copyright (C) 2004 - 2009 Simon Forman
 
     This file is part of Xerblin.
 
