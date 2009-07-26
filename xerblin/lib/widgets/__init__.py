@@ -23,7 +23,7 @@ from xerblin.messaging import ListModel
 from xerblin.lib.programming import Variable
 from xerblin.util.stackcheckers import StackLen, StackType
 from xerblin.lib.widgets.widgetwrapper import makeViewer
-from xerblin.lib.widgets.listwidgets import SequenceController
+from xerblin.lib.widgets.listviewer import SequenceController
 from xerblin.lib.widgets.textviewer import TextViewer
 
 
