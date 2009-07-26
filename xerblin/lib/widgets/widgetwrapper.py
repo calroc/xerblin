@@ -17,6 +17,31 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+This module defines a class,
+
+    XerblinWindow - A Tkinter Toplevel that is adapted to serve as a
+        "hull" for Xerblin Viewer objects.
+
+and a factory function,
+
+    makeViewer() - Takes a title string, model object, Viewer class,
+        optional geometry string (see Tkinter docs or setGeometry word in
+        this module), and options (optional) for the Viewer instance
+        created and for the Toplevel widget itself, and create a Toplevel
+        widget with a Viewer instance for that model.
+
+        Returns a new Xerblin Object with the Toplevel "hull", the Viewer
+        instance, and the model in its dictionary, as well as a few
+        pre-defined words for manipulating them (see below.)
+
+This module also contains classes for three ExecutableWords that the
+makeViewer() factory function creates for each Viewer widget/Object.
+
+    hide - Hides the widget. It won't show up in the system taskbar.
+    show - Shows the (previously hidden) widget.
+    setGeometry - Change the dimensions or location of the widget.
+
+
 '''
 from Tkinter import Toplevel
 from xerblin import Object, ExecutableWord
