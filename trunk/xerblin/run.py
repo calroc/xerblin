@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from pprint import pprint as P
 from xerblin.base import interpret
 from xerblin.btree import fillTree
 from xerblin.library import words
@@ -9,10 +10,13 @@ def make_interpreter():
     stack = ()
     I = stack, dictionary
     return I
+#
+#   Obviously this could just be:
+#   return (), fillTree((), words)
+#   ...but c'mon.
 
 
 if __name__ == '__main__':
-    from pprint import pprint as P
 
     I = make_interpreter()
 
@@ -26,7 +30,7 @@ if __name__ == '__main__':
         
         '23 gary '
         ).split())
-##    print htmlTransform(I)
+
     P(I[0])
 
     while True:
