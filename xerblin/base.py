@@ -1,600 +1,660 @@
 #!/usr/bin/env python
-"""
-    Xerblin - A User Interface
-    Copyright (C) 2004-2009 Simon Forman.
+from pickle import dumps, loads
+'''
+This is a simple Binary Tree implementation that uses tuples in such a
+way as to permit "persistant" usage, i.e. all previous versions of the
+btree datastructures are retained and available (provided you don't throw
+them away yourself.)
 
-    Xerblin is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+It uses functional-style programming.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+The empty tree is represented as an empty tuple.  Nodes are a tuple
+consisting of a key, a value, and two (possible empty) sub-nodes for the
+lower and higher branches of the tree.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+This module defines the following functions:
+
+    insert(node, key, value)
+
+    get(node, key)
+
+    delete(node, key)
+
+Both insert() and delete() return a new tuple that is the result of
+applying the operation to the existing node.  (And both get() and delete()
+will raise KeyErrors if the key is not in the tree.)
+
+Because of the way that insert() and delete() are written, only as much
+of the tree is changed as necessary and the rest of it is reused. This
+provides persistance without using up memory for each version of the
+tree.
+
+These functions are implemented recursively so they have the potential to
+raise a RuntimeError if the maximum recursion depth is exceeded.  This
+should only be a problem if used with very large trees.  To avoid this
+issue you can use sys.setrecursionlimit(), but I think I might just
+rewrite these to not use recursion.
+'''
 
 
+def insert(node, key, value):
+    '''
+    Return a tree with value stored under key. Replaces old value if any.
+    '''
+    if not node:
+        return key, value, (), ()
 
-This module implements the base of the Xerblin demo system.
+    node_key, node_value, lower, higher = node
 
-The Interpreter class is the engine of the whole system.
-ExecutableWord - class of active objects.
+    if key < node_key:
+        return node_key, node_value, insert(lower, key, value), higher
 
-"""
+    if key > node_key:
+        return node_key, node_value, lower, insert(higher, key, value)
+
+    return key, value, lower, higher
 
 
-import sys    #we'll need sys for error reporting below.
-from xerblin.messaging import ListModel, log
+def get(node, key):
+    '''
+    Return the value stored under key or raise KeyError if not found.
+    '''
+    if not node:
+        raise KeyError, key
+
+    node_key, value, lower, higher = node
+
+    if key == node_key:
+        return value
+
+    n = lower if key < node_key else higher
+    return get(n, key)
 
 
-class SimpleInterpreter:
+def delete(node, key):
+    '''
+    Return a tree with the value (and key) removed or raise KeyError if
+    not found.
+    '''
+    if not node:
+        raise KeyError, key
 
-    """
-    Interpreter - This class organizes a Stack of data items and
-    Dictionary of active objects (ExecutableWords) that act on the
-    data items to form the Level 0 core of the Xerblin system.
+    node_key, value, lower, higher = node
 
-    The Interpreter class provides several ways to execute the
-    words in the Dictionary on the items in the Stack.
+    if key < node_key:
+        return node_key, value, delete(lower, key), higher
 
-    Instance Variables:
+    if key > node_key:
+        return node_key, value, lower, delete(higher, key)
 
-        stack : a list of data items
-        dictionary : a dictionary of ExecutableWords
+    # So, key == node_key, delete this node itself.
 
-    Public Methods:
+    # If we only have one non-empty child node return it.  If both child
+    # nodes are empty return an empty node (one of the children.)
+    if not lower:
+        return higher
+    if not higher:
+        return lower
 
-        interpret - Interpret a string containing one or more commands.
-        execute_name - Lookup and execute a single command (given as a string.)
-        execute_word - Execute a given ExecutableWord object.
+    # If both child nodes are non-empty, we find the highest node in our
+    # lower sub-tree, take its key and value to replace (delete) our own,
+    # then get rid of it by recursively calling delete() on our lower
+    # sub-node with our new key.
+    # (We could also find the lowest node in our higher sub-tree and take
+    # its key and value and delete it. I only implemented one of these
+    # two symmetrical options. Over a lot of deletions this might make
+    # the tree more unbalanced.  Oh well.)
+    next = lower
+    while next[3]:
+        next = next[3]
+    key = next[0]
+    value = next[1]
 
-    """
+    return key, value, delete(lower, key), higher
 
-    def __init__(self, stack=None, dictionary=None):
-        """
-        The default values for the stack and dictionary are an empty
-        list and dictionary respectively.
-        Optionally, you can pass a populated list or dictionary to
-        the constructor. The only restriction is on the dictionary,
-        the keys must all be strings and the values must all be
-        instances of ExecutableWord.
-        """
 
-        if stack is None: stack = ListModel()
-        if dictionary is None: dictionary = {}
+# The above functions are the "core" functionality for dealing with this
+# tuple-based persistant BTree datastructure.  The rest of this module is
+# just helper functions and examples.
 
-        dictionary.setdefault('self', SelfWord(self))
 
-        self.stack = stack
-        self.dictionary = dictionary
+def items(node):
+    '''
+    Iterate in order over the (key, value) pairs in a tree.
+    '''
+    if not node:
+        return
 
-    def interpret(self, command_string):
-        """
-        Given a command string, break it into whitespace-delimited
-        commands and execute them one after another. Integers and
-        floats are pushed onto the stack.
-        """
+    key, value, lower, higher = node
+    
+    for kv in items(lower):
+        yield kv
+    
+    yield key, value
+    
+    for kv in items(higher):
+        yield kv
 
-        #The command string must be a string.
-        assert isinstance(command_string, basestring)
 
-        log.debug('interpret: %s', repr(command_string))
+def _yieldBalanced(sorted_items):
+    '''
+    Recursive generator function to yield the items in a sorted sequence
+    in such a way as to fill a btree in a balanced fashion.
+    '''
+    # For empty sequences do nothing.
+    if not sorted_items:
+        return
 
-        #Split the command string on the whitespace.
-        words = command_string.split()
+    # Find the index of the middle item (rounding down for even-length
+    # sequences due to integer division.)
+    i = len(sorted_items) / 2
 
-        #For each command in the command string..
-        for word in words:
+    # Yield the middle item.
+    yield sorted_items[i]
 
-            if word.startswith('"') and word.endswith('"') and \
-               len(word) > 1:
-                self.stack.insert(0, word[1:-1])
-                continue
+    # Shortcut in case len(items) == 1
+    if not i:
+        return 
 
-            #first, try making an integer..
+    # Now recurse on lower and higher halves of the sequence.
+    for low in _yieldBalanced(sorted_items[:i]):
+        yield low
+    for high in _yieldBalanced(sorted_items[i+1:]):
+        yield high
+
+
+def fillTree(node, items):
+    '''
+    Add the (key, value) pairs in items to a btree in a balanced way.
+
+    You can balance a tree like so:
+
+        tree = fillTree((), items(tree))
+
+    This iterates through the tree and returns a new, balanced tree from
+    its contents.
+    '''
+    for key, value in _yieldBalanced(sorted(items)):
+        node = insert(node, key, value)
+    return node
+
+
+'''
+Tuple-based persistent stack.
+'''
+
+
+def push(stack, *items):
+    '''Push arguments onto a stack.'''
+    for item in items:
+        stack = item, stack # push
+    return stack
+
+
+def pop(stack, number):
+    '''Pop number arguments from stack.'''
+    for _ in range(number):
+        item, stack = stack # pop
+        yield item
+    yield stack
+
+
+def iterStack(stack):
+    '''Iterate through the items on the stack.'''
+    while stack:
+        item, stack = stack
+        yield item
+
+
+def lenStack(stack):
+    '''Return the number of items on the stack.'''
+    return sum(1 for _ in iterStack(stack))
+
+
+def pick_(stack, n):
+    '''
+    Find the nth item on the stack and duplicate it to TOS. (Pick with
+    zero is the same as "dup".)
+    '''
+    if n < 0:
+        raise ValueError
+    s = stack
+    while True:
+        try:
+            item, s = s
+        except ValueError:
+            raise IndexError
+        n -= 1
+        if n < 0:
+            break
+    return item, stack
+
+
+'''
+The first three functions defined in this module are used to build
+"combo" commands in the UI.  There are corresponding commands in the
+library (NewSeqWord, NewLoopWord, and NewBranchWord) that build tuples
+with these functions as the first item in the tuple.  When applyFunc()
+encounters these tuples the initial handler function is used to "run" the
+other functions in the tuple.
+
+The three functions are:
+
+    handleSequence
+
+    handleBranch
+
+    handleLoop
+
+The applyFunc() function is used by the handlers and the interpret()
+function in xerblin.py to "run" commands on the interpreter.
+'''
+
+
+# Helper function factored out from handleBranch() and handleLoop().
+def _popTOS(I):
+    '''
+    Pop the top item off the stack and return it with the
+    modified interpreter
+    '''
+    (TOS, stack), dictionary = I
+    return TOS, (stack, dictionary)
+
+
+# These three following functions process the three kinds of combo-words.
+
+def handleSequence(I, seq):
+    '''
+    Run a sequence and return the modified interpreter.
+    '''
+    for func in seq[1:]:
+        I = applyFunc(I, func)
+    return I
+
+
+def handleBranch(I, branch):
+    '''
+    Check TOS and do one thing or another depending.
+    '''
+    TOS, I = _popTOS(I)
+    func = branch[(not TOS) + 1] # i.e. True = 1; False = 2
+    return applyFunc(I, func)
+
+
+def handleLoop(I, loop):
+    '''
+    Check TOS and do body if it's true, repeat.
+    '''
+    while True:
+        TOS, I = _popTOS(I)
+        if not TOS:
+            break
+        I = handleSequence(I, loop)
+    return I
+
+
+def applyFunc(I, func):
+    '''
+    Given an interpreter and a function or combo-word tuple, apply the
+    function or combo to the interpreter and return the modified
+    interpreter.
+    '''
+    if isinstance(func, tuple):
+        handler = func[0]
+        I = handler(I, func)
+    else:
+        I = func(I)
+    return I
+
+
+'''
+This module builds a Xerblin system out of purely "functional" parts.
+
+An interpreter is represented by a two-tuple that holds a stack and a
+dictionary.
+
+The stack is a sort of "linked list" structure while the dictionary is a
+BTree that maps string names to four kinds of entries:
+
+    Functions - These must accept an interpreter, modify it somehow, and
+        return the modified interpreter.  They are defined in the library
+        module.
+
+    Or, one of three kinds of tuple.  The kind of the tuple is indicated
+    by its first member, which is a handler function, and the rest of the
+    tuple consists in its body as indicated:
+
+        (SEQUENCE HANDLER, func0, func1, func2)
+        
+        (BRANCH HANDLER, true_func, false_func)
+        
+        (LOOP HANDLER, func0, func1, func2)
+
+    where any of the functions can be themselves SEQ, BRANCH, LOOP, or
+    plain functions as described above.
+
+
+Interpretation is done by means of an applyFunc(interpreter, function)
+function that knows how to deal with the above combo-word tuples as well
+as library word functions.
+'''
+
+
+# This is the main point of this module.  It implements the system with
+# the help of the applyFunc() function.
+def interpret(I, command):
+    '''
+    Given an interpreter and a string command, interpret that string on
+    the interpreter and return the modified interpreter.
+    '''
+    for word in command.split():
+
+        # Is it an integer?
+        try:
+            literal = int(word)
+        except ValueError:
+
+            # Is it a float?
             try:
-                i = int(word)
-                self.stack.insert(0, i)
+                literal = float(word)
             except ValueError:
 
-                #if that didn't work, try making a float..
-                try:
-                    f = float(word)
-                    self.stack.insert(0, f)
-                except ValueError:
+                # Is it a string literal?
+                if word.startswith('"') and word.endswith('"'):
+                    literal = word[1:-1]
 
-                    #not a float or integer, eh? Let's try executing it..
-                    self.execute_name(word)
+                # Nope, it must be a command word.
+                else:
+                    # Interpret the word.
+                    func = get(I[1], word)
+                    I = applyFunc(I, func)
+                    continue
 
-    def execute_name(self, word):
-        """
-        Given the name of an ExecutableWord in the dictionary (we hope,)
-        Look up the word in self's dictionary and then execute it.
-        """
-        try:
-            eword = self.dictionary[word]
-        except KeyError:
-            raise UnknownWordError(word)
-        self.execute_word(eword)
+        # A literal was found, push it onto the stack.
+        I = (literal, I[0]), I[1]
 
-    def execute_word(self, eword):
-        """
-        Given an instance of an ExecutableWord, execute it with self's stack.
-        """
-        BracketedExecuteWord(self.stack, eword)
+    return I
 
-    def _become(self, stack, dictionary):
-        '''
-        Given a new stack and dictionary, "become" the interpreter defined
-        by them.  Support for state persistance.
-        '''
 
-        #the new stack becomes our stack
-        self.stack[:] = stack
+# Library
 
-        #the new dictionary becomes our dictionary
-        self.dictionary.clear()
-        self.dictionary.update(dictionary)
+# Mark the current namespace contents.
+_existing = set(dir())
+_existing.add('_existing')
 
+# Stack chatter.
 
-def BracketedExecuteWord(stack, eword):
-    """
-    Given an instance of an ExecutableWord, execute it with stack.
-    """
-
-    #Check that the incoming arguments are acceptable.
-    if __debug__:
-        try:
-            eword._stackok(stack)
-        except AssertionError, message:
-            print >> sys.stderr, 'input error "%s":' % eword.name, message
-            raise
-
-    #Execute the word.
-    try:
-        eword.execute(stack)
-    except AssertionError, message:
-        print >> sys.stderr, 'execute error "%s":' % eword.name, message
-        raise
-
-    #Check that the outgoing results are acceptable.
-    if __debug__:
-        try:
-            eword._resultsok(stack)
-        except AssertionError, message:
-            print >> sys.stderr, 'output error "%s":' % eword.name, message
-            raise
-
-
-class ExecutableWord(object):
-    """
-    ExecutableWord - This class encapsulates the action of
-    a single atomic command. It also carries metadata about
-    the command, such as its name and the types and order of
-    arguments it accepts and returns.
-
-    Instance Variables:
-
-        name : the name of the command.
-
-    Methods:
-
-        execute - Perform the action of the command on a given stack.
-            ("execute" is overridden in subclasses to do useful work.)
-
-        _stackok - Check if a list of args matches the input_args.
-        _resultsok - Check if a list of results matches the output_args.
-
-    """
-
-    def __init__(self, name=None):
-        """
-        Create an ExecutableWord. If a name is given, use it.
-        """
-
-        if not name:
-
-            #See if we've been given a name already.
-            try:
-                name = self.__name__
-
-            #The default name is the name of self's class.
-            except AttributeError:
-                name = self.__class__.__name__
-
-        #Remember the name.
-        self.name = name
-
-    def execute(self, stack):
-        """
-        Perform the action of self on the contents of the stack.
-        """
-        pass
-
-    def _stackok(self, stack):
-        """
-        Check that the given stack is good for processing.
-        """
-        pass
-
-    def _resultsok(self, stack):
-        """
-        Check that self's results agree with expectations.
-        """
-        pass
-
-    def __repr__(self):
-        return "Word %s" % self.name
-
-
-Nop = ExecutableWord('Nop')
-Nop.__doc__ = 'No Operation. Default "do nothing" word.'
-
-
-class UnknownWordError(Exception):
-    """
-    Raised when an unknown word is encountered by the Interpreter.
-    """
-
-
-################################################################################
-##
-##    ComboWords
-##
-##    These words are the basis for creating complex commands out of other words.
-##
-##    Each of these words organizes two or more other words into a certain
-##    arrangement. The four types are:
-##
-##    Branch     - Do one thing or the other, depending on the results of a test.
-##    Sequential - Do one thing after another.
-##    Loop       - Do something over again, depending on the results of a test.
-##    Parallel   - Do two things that don't interfere with each other.
-##
-##    That is all the kinds of combinations of words there are.
-##
-################################################################################
-
-
-####################################
-#### Branch Word                ####
-####################################
-
-class BranchExecutableWord(ExecutableWord):
-    """
-    """
-
-    __name__ = "branch"
-
-    def __init__(self, name=None):
-        """
-        Branch  - Do one thing or the other, depending on the results of a test.
-        """
-
-        #Remember self's children.
-        self.word0 = self.word1 = Nop
-
-        #Call the superclass constructor
-        ExecutableWord.__init__(self, name)
-
-    def _stackok(self, stack):
-        assert stack, 'stack too small, needs 1 thing'
-        super(BranchExecutableWord, self)._stackok(stack)
-
-    def execute(self, stack):
-        """
-        Pop and check the top value from the stack, then
-        either execute word0 or word1 depending.
-        """
-
-        #Get the boolean flag value.
-        flag = stack.pop(0)
-
-        #If true (i.e. flag != 0) execute word1..
-        if flag:
-            BracketedExecuteWord(stack, self.word1)
-
-        #if false (i.e. flag == 0) execute word0.
-        else:
-            BracketedExecuteWord(stack, self.word0)
-
-    def __repr__(self):
-        return '%s & %s %s' % (
-            self.name, self.word1.name, self.word0.name
-            )
-
-
-####################################
-#### Sequence Word              ####
-####################################
-class SequentialExecutableWord(ExecutableWord, ListModel):
-    """
-    SequentialExecutableWord - This class executes its words one after
-    the other. It doesn't check the argument signatures of its child
-    words.
-
-    Public Methods:
-        execute - Execute self's words.
-
-    """
-
-    __name__ = "seq"
-
-    def __init__(self, name=None, initlist=[]):
-        list.__init__(self, initlist)
-        # ListModel doesn't have its own __init__().
-        ExecutableWord.__init__(self, name)
-
-    def __getstate__(self):
-        state = [self.name, list(self)]
-        if hasattr(self, 'doc'):
-            state.append(self.doc)
-        return state
-
-    def __setstate__(self, state):
-        name, items = state[:2]
-        self.name = name
-##        list.__setslice__(self, 0, 0, items) # Huh!?  w/o this unpickling
-        # creates the seq words just fine, with it they each have 2x their
-        # words.  I.e. "seq = 0 1 2 0 1 2"  (not "= 0 1 2")
-        if len(state) == 3:
-            self.doc = state[2]
-
-    def execute(self, stack):
-        """
-        Execute self's kids. (Doesn't that sound horrible!)
-        Overrides superclass method.
-        """
-        for kid in self:
-            BracketedExecuteWord(stack, kid)
-
-    def __setitem__(self, k, v):
-        assert isinstance(v, ExecutableWord)
-        super(SequentialExecutableWord, self).__setitem__(k, v)
-
-    def __setslice__(self, i, j, seq):
-        assert False not in (isinstance(n, ExecutableWord) for n in seq)
-        super(SequentialExecutableWord, self).__setslice__(i, j, seq)
-
-    def __iadd__(self, other):
-        assert False not in (isinstance(n, ExecutableWord) for n in other)
-        return super(SequentialExecutableWord, self).__iadd__(other)
-
-    def append(self, item):
-        assert isinstance(item, ExecutableWord)
-        super(SequentialExecutableWord, self).append(item)
-
-    def insert(self, i, item):
-        assert isinstance(item, ExecutableWord)
-        super(SequentialExecutableWord, self).insert(i, item)
-
-    def extend(self, other):
-        assert False not in (isinstance(n, ExecutableWord) for n in other)
-        super(SequentialExecutableWord, self).extend(other)
-
-    def __repr__(self):
-        return '%s = %s' % (self.name, ' '.join(n.name for n in self))
-
-
-####################################
-#### Loop Word                  ####
-####################################
-class LoopExecutableWord(SequentialExecutableWord):
-    """
-    """
-
-    __name__ = "loop"
-
-    def _stackok(self, stack):
-        assert stack, 'stack too small, needs 1 thing'
-        super(LoopExecutableWord, self)._stackok(stack)
-
-    def execute(self, stack):
-        """
-        Check the value on the TOS for Trueness, execute body if so.
-
-        There is an infinite loop check in the form of the safety counter.
-        It's a crude but effective protection for now but it shouldn't remain
-        for long.
-        """
-
-        safety = 10000
-        while safety:
-            safety -= 1 #no more than 10000 interations for now.
-
-            if __debug__:
-                self._stackok(stack) # Re-check the stack on each iteration.
-
-            flag = stack.pop(0)
-
-            if flag:
-                SequentialExecutableWord.execute(self, stack)
-
-            else:
-                safety = True #in case flag == False and safety == 0
-                break
-
-        if not safety:
-            raise OverflowError, (self, 'recursion limit exceeded.')
-
-    def __repr__(self):
-        return '%s @ %s' % (self.name, ' '.join(n.name for n in self))
-
-
-####################################
-####  Parallel Word             ####
-####################################
-class ParallelExecutableWord(ExecutableWord):
-    """
-    This is just a preliminary first approximation.
-    """
-
-    __name__ = "fork"
-
-    def __init__(self, name=None, word0=Nop, word1=Nop):
-        """
-        """
-
-        #Check that both words are ExecutableWords.
-        assert isinstance(word0, ExecutableWord)
-        assert isinstance(word1, ExecutableWord)
-
-        #Remember self's children.
-        self.word0 = word0
-        self.word1 = word1
-
-        #Call the superclass constructor
-        ExecutableWord.__init__(self, name)
-
-    def execute(self, stack):
-        """
-        """
-        raise NotImplementedError, self
-
-    def __repr__(self):
-        return '%s | %s %s' % (
-            self.name, self.word1.name, self.word0.name
-            )
-
-
-class warranty(ExecutableWord):
-    """
-                            NO WARRANTY
-
-BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
-FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
-OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
-PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
-OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS
-TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE
-PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
-REPAIR OR CORRECTION.
-
-IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
-WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
-REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
-INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING
-OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED
-TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY
-YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER
-PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGES.
-
-    """
-    def execute(self, stack):
-        print self.__doc__
-
-
-class SelfWord(ExecutableWord):
-
-    __name__ = 'self'
-
-    def __init__(self, interpreter):
-        ExecutableWord.__init__(self)
-        self.interpreter = interpreter
-
-    def execute(self, stack):
-        stack.insert(0, self.interpreter)
-
-    def __repr__(self):
-        return '%s word - %s ' % (
-            self.name,
-            getattr(self.interpreter, 'name', self.interpreter)
-            )
-
-class Interpreter(SimpleInterpreter):
-    __doc__ = SimpleInterpreter.__doc__
-
-    def __init__(self, stack=None, dictionary=None):
-        SimpleInterpreter.__init__(self, stack, dictionary)
-        self.dictionary.setdefault('Nop', Nop)
-        self.dictionary.setdefault('warranty', warranty())
-        self.windows = []
-
-
-class DefaultExecute(ExecutableWord):
+def dup(interpreter):
     '''
-    This is a class to make 'execute' ExecutableWords for Objects.
+    "Duplicate" the top item on the stack.
+    '''
+    stack, dictionary = interpreter
+    return (stack[0], stack), dictionary
+
+
+def swap(interpreter):
+    '''
+    Reverse the order of the top two items on the stack.
     '''
 
-    def __init__(self, thing):
-        ExecutableWord.__init__(self, 'execute')
-        self.thing = thing
-
-    def _stackok(self, stack):
-        assert len(stack) >= 1, 'stack too small, needs 1 thing'
-
-    def execute(self, stack):
-        '''
-        To use:
-
-            Put some args onto the stack then put a string command onto
-            the stack, the inner Object gets those args as a list on it's
-            stack.
-
-            Caller: ["some commands", a, b, c]
-
-            Caller calls Object.execute() which appends caller's stack
-            onto callee's stack, like so:
-
-                [["some commands", a, b, c], x, y, z] <=:Callee's stack.
-
-                DefaultExecute.execute() pops the message/command off of
-                the caller's embedded stack
-
-                [[a, b, c], x, y, z] : <= "some commands"
-        '''
-
-        message = stack[0].pop(0)
-
-        self.thing.interpret(message)
-
-    def __repr__(self):
-        return '%s word - %s ' % (
-            self.name,
-            getattr(self.thing, 'name', self.thing)
-            )
+    stack, dictionary = interpreter
+    TOS, second, stack = pop(stack, 2)
+    stack = push(stack, TOS, second)
+    return stack, dictionary
 
 
-class Object(Interpreter, ExecutableWord):
-    """"
-    An Object class created by merging an Interpreter and an ExecutableWord.
-    """
+def pick(interpreter):
+    '''
+    Takes a number from the stack, counts back that many items (starting
+    from zero for the top item) and puts a "duplicate" of the item found
+    on the top of the stack. (So pick with 0 on the stack is thte same as
+    the command "dup".)
+    '''
+    stack, dictionary = interpreter
+    TOS, stack = stack
+    stack = pick_(stack, TOS)
+    return stack, dictionary
 
-    def __init__(self, name=None, stack=None, dictionary=None):
-        Interpreter.__init__(self, stack, dictionary)
-        ExecutableWord.__init__(self, name)
-        if 'execute' not in self.dictionary:
-            self.dictionary['execute'] = DefaultExecute(self)
 
-    def execute(self, stack):
-        try:
-            execute = self.dictionary['execute']
-        except KeyError:
-            return
-        self.stack.insert(0, stack)
-        self.execute_word(execute)
+def tuck(interpreter):
+    '''
+    Put a "duplicate" of the item on the top of the stack just under the
+    second item on the stack. (I.e. top, second, top.)
+    '''
+    stack, dictionary = interpreter
+    TOS, second, stack = pop(stack, 2)
+    stack = push(stack, TOS, second, TOS)
+    return stack, dictionary
 
-    def __repr__(self):
-        return 'Object %s' % self.name
+
+def drop(interpreter):
+    '''
+    Remove the item on the top of the stack and discard it.
+    '''
+    stack, dictionary = interpreter
+    return stack[1], dictionary
+
+
+def over(interpreter):
+    '''
+    Put a "duplicate" of the second item down in the stack on the top of
+    the stack. (I.e. second, top, second.)
+    '''
+    stack, dictionary = interpreter
+    TOS, second, stack = pop(stack, 2)
+    stack = push(stack, second, TOS, second)
+    return stack, dictionary
+
+# Programming words.
+
+def lookup(interpreter):
+    '''
+    Given a name on the top of the stack, look up the named command in
+    the dictionary and put it on the stack in place of the name.
+    '''
+    (name, stack), dictionary = interpreter
+    word = get(dictionary, name)
+    return (word, stack), dictionary
+
+
+def inscribe(interpreter):
+    '''
+    Given a name string on the top of the stack and a "combo" command
+    underneath it (see NewSeqWord, NewLoopWord, and NewBranchWord for how
+    to make combo commands) "inscribe" the combo command into the
+    dictionary under that name, replacing any previous command of that
+    name.
+    '''
+    stack, dictionary = interpreter
+    name, word, stack = pop(stack, 2)
+    dictionary = insert(dictionary, name, word)
+    return stack, dictionary
+
+
+def NewSeqWord(interpreter):
+    '''
+    This command takes all the items on the stack and puts them into a
+    tuple with the Sequence Handler function in front of them.
+
+    The items on the stack should all be commands from the dictionary,
+    either functions or combo commands.  You get these by using the
+    "lookup" command on the names of the functions you want.
+
+    Put the first command to run on the stack first, then the second, and
+    so on, so that the last item to run is on the top of the stack when
+    you run this command.
+    '''
+    stack, dictionary = interpreter
+    words = tuple(reversed(list(iterStack(stack))))
+    seq = (handleSequence,) + words
+    return (seq, ()), dictionary
+
+
+def NewLoopWord(interpreter):
+    '''
+    This command takes all the items on the stack and puts them into a
+    tuple with the Loop Handler function in front of them.
+
+    A Loop consumes the top item on the stack, then depending on it's
+    "truth" either runs the commands in its tuple and repeats if it's
+    true or stops looping altogether if it's false.
+
+    Put the first command to run on the stack first, then the second, and
+    so on, so that the last item to run is on the top of the stack when
+    you run this command.
+    '''
+    stack, dictionary = interpreter
+    words = tuple(reversed(list(iterStack(stack))))
+    loop = (handleLoop,) + words
+    return (loop, ()), dictionary
+
+
+def NewBranchWord(interpreter):
+    '''
+    Create a new Branch command word.  A branch consumes the top item on
+    the stack and does one of two things depending on its "truth" value.
+    Unlike Loops and Sequences which use all the items on the stack,
+    Branch commands only take the top two items. The item on the top of
+    the stack should be a function to use in case of "true" and the
+    second should be a function to use for "false".
+    '''
+    stack, dictionary = interpreter
+    true, false, stack = pop(stack, 2)
+    branch = (handleBranch, true, false)
+    stack = push(stack, branch)
+    return stack, dictionary
+
+
+# Math words.
+
+def add(interpreter):
+    '''
+    Add the top two items on the stack and replace them with the sum.
+    '''
+    stack, dictionary = interpreter
+    a, b, stack = pop(stack, 2)
+    return (a + b, stack), dictionary
+
+
+def sub(interpreter):
+    '''
+    Replace the top two items on the stack with the result of subtracting
+    the top item from the second item.
+    '''
+    stack, dictionary = interpreter
+    a, b, stack = pop(stack, 2)
+    return (b - a, stack), dictionary
+
+
+def mul(interpreter):
+    '''
+    Replace the top two items on the stack with the result of multiplying
+    them together.
+    '''
+    stack, dictionary = interpreter
+    a, b, stack = pop(stack, 2)
+    return (a * b, stack), dictionary
+
+
+# Pickling words.
+
+def pickle(interpreter):
+    '''
+    Convert the current interpreter to a portable text format (called a
+    "pickle".)
+    '''
+    stack, dictionary = interpreter
+    p = dumps(interpreter)
+    return (p, stack), dictionary
+
+
+def unpickle(interpreter):
+    '''
+    Take a string "pickle" portable text representation of an interpreter
+    and replace the current interpreter with it.
+    '''
+    stack = interpreter[0]
+    return loads(stack[0])
+
+
+# System words
+
+def rebalance(interpreter):
+    '''
+    This "rebalances" a dictionary.  It makes it more efficient to access
+    commands in the dictionary if you've added a lot of new ones.
+
+    It's a good idea to use this command before creating a pickle to
+    save so that the saved pickle's dictionary is already balanced.
+    '''
+    stack, dictionary = interpreter
+    dictionary = fillTree((), items(dictionary))
+    return stack, dictionary
+
+
+def view(interpreter):
+    '''
+    Pretty print the interpreter to stdout.
+    '''
+    from pprint import pprint as p
+    p(interpreter)
+    return interpreter
+
+
+def listwords(interpreter):
+    '''
+    Print the list of words in the dictionary to stdout.
+    '''
+    stack, dictionary = interpreter
+    for name, func in items(dictionary):
+        print name
+    print
+    return interpreter
+
+
+# Now extract all the library functions we just defined.
+_word_names = set(dir()) - _existing
+
+
+# Pull words from this dict.
+words = [
+    (name, function)
+    for name, function in locals().items()
+    if name in _word_names
+    ]
+
+
+def make_interpreter():
+    dictionary = fillTree((), words)
+    stack = ()
+    I = stack, dictionary
+    return I
 
 
 if __name__ == '__main__':
+    from pprint import pprint as P
 
-    class dotess(ExecutableWord):
-        __name__ = '.s'
-        def execute(self, stack):
-            print stack
+    I = make_interpreter()
 
-    interp = Object(dictionary = {'.s':dotess()})
+    I = interpret(I, (
+        '"dup" lookup NewSeqWord "gary" inscribe '
+        
+        '"gary" lookup '
+        'NewSeqWord '
+        '"barry" '
+        'inscribe '
+        
+        '23 gary '
+        ))
+##    print htmlTransform(I)
+    P(I[0])
 
-    interp.interpret('.s 1 2.3 4 .s')
+    while True:
+        try:
+            command = raw_input('> ')
+        except EOFError:
+            print
+            break
+        I = interpret(I, command)
+        P(I[0])
 
-##Output:
-##[]
-##[1, 2.2999999999999998, 4]
