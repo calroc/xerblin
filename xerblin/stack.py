@@ -1,7 +1,7 @@
 '''
 Tuple-based persistent stack.
 
-This is too simple to document.
+This is too simple to document.  It's almost too simple to implement.
 '''
 
 
@@ -49,3 +49,4 @@ def pick_(stack, n):
         if n < 0:
             break
     return item, stack
+
