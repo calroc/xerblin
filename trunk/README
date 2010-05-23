@@ -1,5 +1,5 @@
 Xerblin - A User Interface
-Copyright (C) 2004, 2005, 2006, 2007, 2008 Simon Forman
+Copyright © 2004-2010 Simon Forman
 
 Xerblin is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
-Friday, 27 June 2008
+Saturday, 22 May 2010
 
 This is a demo proof-of-concept version of the Xerblin system.
 
@@ -34,20 +34,13 @@ MANIFEST.in                   - File list patterns
 setup.py                      - Python distutils installer
 
 docs/gpl.txt                  - GNU General Public License
-docs/TODO                     - To do list
-docs/usersguide.txt           - Beginnings of a User's Guide
 
 xerblin/base.py               - Basic Xerblin system.
+xerblin/library.py            - "Standard Library" Xerblin words
+xerblin/btree.py              - Binary Tree, "Functional"
+xerblin/stack.py              - Stack, "Functional"
 
-xerblin/lib/*                 - "Standard Library" Xerblin words
-
-bin/xerblin                   - The Xerblin script, i.e. run this
-                                (It should be installed automatically by
-                                following the instructions under
-                                "Installation" below.)
-
-xerblin/util/stackcheckers.py - Support for stack checking
-
+xerblin/run.py                - Usage example.
 
 
 ======================================================
@@ -68,27 +61,4 @@ site-packages directory and put the xerblin script itself somewhere on
 your PATH.
 
 
-
-======================================================
-Running Xerblin
-----------------------------------------------------
-
-To use the system start xerblin in the background with a command like:
-
-    xerblin &
-
-There is a single commandline option:
-
-    -s <script file>
-
-        path to a Xerblin "script".  This script will be run on the
-        Xerblin interpreter before the system is presented to the user.
-        This is basically ".xerblinrc", however no file name is 
-        automatically looked for or loaded.
-
-There you go.  The system starts with the Guide open. If you want to 
-know more please drop me a line,
-
 Simon Forman <forman.simon@gmail.com>
-
-
