@@ -5,22 +5,12 @@ from xerblin.btree import fillTree
 from xerblin.library import words
 
 
-def make_interpreter():
-    dictionary = fillTree((), words)
-    stack = ()
-    I = stack, dictionary
-    return I
-#
-#   Obviously this could just be:
-#   return (), fillTree((), words)
-#   ...but c'mon.
+ROOT = (), fillTree((), words)
 
 
 if __name__ == '__main__':
 
-    I = make_interpreter()
-
-    I = interpret(I, (
+    I = interpret(ROOT, (
         '"dup" lookup NewSeqWord "gary" inscribe '
         
         '"gary" lookup '
@@ -31,14 +21,15 @@ if __name__ == '__main__':
         '23 gary '
         ).split())
 
-    P(I[0])
+    print_stack = lambda: P(I[0])
 
     while True:
+        print_stack()
         try:
             command = raw_input('> ').split()
         except EOFError:
+            print_stack()
             print
             break
         I = interpret(I, command)
-        P(I[0])
 
