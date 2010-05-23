@@ -111,7 +111,7 @@ def delete(node, key):
 
 # The above functions are the "core" functionality for dealing with this
 # tuple-based persistant BTree datastructure.  The rest of this module is
-# just helper functions and examples.
+# just helper functions.
 
 
 def items(node):

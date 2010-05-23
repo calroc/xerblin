@@ -49,12 +49,13 @@ function to "run" commands on the interpreter.
 from xerblin.btree import get
 
 
-# Helper function factored out from handleBranch() and handleLoop().
 def _popTOS(I):
     '''
     Pop the top item off the stack and return it with the
     modified interpreter
     '''
+    # This is a helper function factored out from handleBranch() and
+    # handleLoop() below.
     (TOS, stack), dictionary = I
     return TOS, (stack, dictionary)
 

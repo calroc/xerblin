@@ -245,7 +245,7 @@ def listwords(interpreter):
 _word_names = set(dir()) - _existing
 
 
-# Pull words from this dict.
+# Pull words from this list.
 words = [
     (name, function)
     for name, function in locals().items()
