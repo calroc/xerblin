@@ -3,5 +3,10 @@ MANIFEST.in
 README
 setup.py
 docs/gpl.txt
+scripts/run.py
+scripts/world.py
 xerblin/__init__.py
 xerblin/base.py
+xerblin/btree.py
+xerblin/library.py
+xerblin/stack.py

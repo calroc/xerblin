@@ -1,4 +1,5 @@
 include README MANIFEST MANIFEST.in
 include setup.py
 include xerblin/*.py
+include scripts/*.py
 include docs/*
