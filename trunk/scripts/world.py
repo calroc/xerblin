@@ -1,60 +1,87 @@
 #!/usr/bin/env python
 '''
-Starting with an initial state comprised of a stack (of nominal data) and
-a dictionary of commands (and possibly named state "variables" as well)
+This script defines a proof-of-concept frame for interacting with a
+xerblin interpreter.
+
+It defines two classes: Serializer and World.
+
+Serializer deals with saving history protocols to a pickle file and World
+deals with interacting with an interpreter in a loop.
+
+This module also defines a subclass of World called HistoryListWorld that
+tracks history in a list object.
+
+Starting with an initial interpreter (comprised of a stack of nominal
+data and a dictionary of commands and possibly named state "variables")
 the user issues a command to the interpreter which then results in a new
 state (which can be the same as the initial state.)
 
-This model can be brought to the keyboard level.  Each press of a
-character key pushes a character onto the stack; the 'enter' key collects
-all the characters currently on the stack and sends them "up" a level to
-be a command or signal to the interpreter.
-
-At the other side of the interpreter we have the frame that the
-interpreter is embedded in which provides the view and history and
-serialization controls.
+The interpreter is embedded in a frame (a World or subclass) which
+provides view and history and serialization controls.
 
 These frame "meta" controls are several:
 
-    Change the view function.
+  Change the view function.
     
-    Views take a state (interpreter, stack and dictionary) and render it
-    somehow for the user.  Implied but not necessary are means for direct
-    manipulation of views to send commands to the interpreter.  It may
-    well turn out that tight feedback loops between views and modeled
-    states will require a relaxation of the strict functional style I'm
-    striving for here.  In any event, views take a state and render it.
+    View functions take a state (interpreter, stack and dictionary) and
+    render it somehow for the user.
+    
+    Implied but not necessary are means for direct manipulation of views
+    to send commands to the interpreter.  It may well turn out that tight
+    feedback loops between views and modeled states will require a
+    relaxation of the strict functional style I'm striving for here.
+    
+    In any event, views take a state and render it.
+    
     Views may render as text in a terminal or GUI text widget, "direct"
     graphics via Pygame, etc., GUI systems such as Tkinter or wxPython,
     document formats like Postscript or PDF, graphs using matplotlib or
     other libraries in formats such as PNG or SVG, or web UIs using HTML,
     CSS, Javascript, and perhaps even ActionScript (Flash).
 
-    Examine history and change to previous states.
+  Examine history and change to previous states.
 
     The chief advantage of storing all history is in the ease of going
     back and trying something new from a previous point in time.
-    However, this requires some means of indexing and displaying the
-    states in your history and your path through them so you can decide
-    when to go back to, and a way to actually go back and set your
-    current state to a previous state and add the transition to the
-    history.  This requires another kind of view that can display not
-    just one state time-slice of your history, but also the tree-like
-    path from state to state you took.  (There is a strange loop here: do
-    you keep the history of the changing of the history?  What about the
-    history of the keeping of that history, do you keep that too?  And
-    that keeping's history? Etc...  In practice we are likely to make do
-    with only one level of history.)
 
-    Set external save files.
+    This requires some means of indexing and displaying the states in
+    your history and your path through them so you can decide when to go
+    back to, and a way to actually go back and set your current state to
+    a previous state and add the transition to the history.
+    
+    This seems to require another kind of view that can display not just
+    one state time-slice of your history, but also the tree-like path
+    from state to state you took.
+    
+    (There is an infinite regression here: do you keep the history of the
+    changing of the history?  What about the history of the keeping of
+    that history, do you keep that too?  And that keeping's history?
+    Etc...  In practice we are likely to make do with only one level of
+    history.)
+
+    In addition to simply stepping back and forth in time, we will also
+    want to "pull" data from different history states, possibly in
+    multiple stored pickle files, and combine them in a new synthesized
+    states.  We can build new interpreters with the data and commands we
+    need to perform tasks and achieve our goals.
+
+    As yet, this script provides only indirect means to manipulate and view
+    history.  You can use a HistoryListWorld and manipulate its history
+    attribute, which is a list containing all the states of the system in
+    order starting with the initial state.
+
+  Manipulate external save files.
 
     The histories must be stored in python pickle files in some external
     media (i.e. a disk drive or memory stick) and there are issues of
     selecting and loading histories and managing the relations between
     them.
 
-
-Keyboard, interpreter, meta-controls.
+    Currently this script provides no direct means to do any of this.
+    
+    You can pass a file name or open file object to the World as its
+    save_file argument and that will be used to save the pickle data as
+    you use the World object, but other than that you're on your own.
 
 '''
 import pickle, pprint, StringIO
@@ -133,11 +160,12 @@ class World:
         self.setCurrentState(I)
 
         # Save the command and its resultant state in the serializer. The
-        # history list serves as a sort of cache on the contents of the
-        # serializer pickle stream.  (The Pickler object's memo dict
-        # essentially keeps this cache for us but I don't want to
-        # introduce a bunch of tight coupling with the pickle medule,
-        # despite the fact that it is likely to be pretty stable.)
+        # history list in the HistoryListWorld subclass serves as a sort
+        # of cache on the contents of the serializer pickle stream.  (The
+        # Pickler object's memo dict essentially keeps this cache for us
+        # but I don't want to introduce a bunch of tight coupling with
+        # the pickle medule, despite the fact that it is likely to be
+        # pretty stable.)
         self.serializer.post(command, I)
 
         # Render the view.
@@ -220,7 +248,7 @@ class Serializer:
     The Pickler keeps a memo dict of the objects it has seen and pickled
     already and when it sees them again it serializes a reference to them
     rather than the whole object, automatically providing a sort of
-    Huffman coding for the persistant datastructures we're storing in the
+    compression for the persistant datastructures we're storing in the
     pickle stream.
 
     You can open the pickle file and call load() repeatedly to get a
@@ -251,7 +279,7 @@ if __name__ == "__main__":
 
     # For convenience print out the commands in the dictionary at
     # startup.
-    dictionary = w.history[0][1]
+    dictionary = w.getCurrentState()[1]
     print ' '.join(name for name, value in items(dictionary))
     print
 
