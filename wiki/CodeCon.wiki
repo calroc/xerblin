@@ -1,1 +1,0 @@
-I gave a presentation of Xerblin at CodeCon 2004 in San Francisco that was very well received. If you are interested in listening to that, there is an audio recording of it in mp3 format: [http://www.xerblin.com/CodeCon_2004-02-20_2.mp3 CodeCon_2004-02-20_2.mp3].
