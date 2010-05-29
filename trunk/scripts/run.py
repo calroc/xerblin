@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 '''
 
-This is a basic, trivial text mode script to run commands on an
-interpreter.  It's mostly useful as a demonstration of the xerblin system
-as it doesn't do anything fancy like recording history.
+This is a trivial text mode script to run commands on an interpreter.
+It's mostly useful as a demonstration of the xerblin system as it doesn't
+do anything fancy like recording history.
 
 '''
 
