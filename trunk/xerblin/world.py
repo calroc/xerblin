@@ -87,6 +87,23 @@ from xerblin.library import words
 from xerblin.base import interpret
 
 
+def view0(I):
+    '''Print the stack to stdout with python's default formatting.'''
+    print repr(I[0])
+    print
+
+
+def view1(I):
+    '''Print the stack to stdout using the pprint module.'''
+    pprint.pprint(I[0])
+    print
+
+
+def nullView(I):
+    '''"Do nothing" view.'''
+    pass
+
+
 # An initial interpreter to use for spawning worlds.  It has an empty
 # stack and whatever commands are defined by default in the library
 # module.
@@ -106,7 +123,7 @@ class World:
 
     '''
 
-    def __init__(self, view, initial=None, save_file=None):
+    def __init__(self, view=nullView, initial=None, save_file=None):
         '''
         Create a World object with the given view function.
 
@@ -214,22 +231,6 @@ class HistoryListWorld(World):
         '''
         # Current state is just the most recent history.
         return self.history[-1]
-
-
-def view0(I):
-    '''
-    Print the stack to stdout with python's default formatting.
-    '''
-    print repr(I[0])
-    print
-
-
-def view1(I):
-    '''
-    Print the stack to stdout using the pprint module.
-    '''
-    pprint.pprint(I[0])
-    print
 
 
 class Serializer:
