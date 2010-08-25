@@ -18,7 +18,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Saturday, 22 May 2010
 
-This is a demo proof-of-concept version of the Xerblin system.
+This is a demo proof-of-concept version of the Xerblin system. The core
+code has been rewritten in "Functional" style.
 
 For more information visit http://code.google.com/p/xerblin/
 
@@ -39,8 +40,9 @@ xerblin/base.py               - Basic Xerblin system.
 xerblin/library.py            - "Standard Library" Xerblin words
 xerblin/btree.py              - Binary Tree, "Functional"
 xerblin/stack.py              - Stack, "Functional"
+xerblin/world.py              - A basic frame for history.
 
-xerblin/run.py                - Usage example.
+scripts/demo.py                - Usage example.
 
 
 ======================================================
