@@ -59,8 +59,8 @@ And that should do it.  If you have any problems please email me (my
 address is below.)  Include a copy of the complete traceback if any.
 
 The setup command above will install the xerblin package into your python
-site-packages directory and put the xerblin script itself somewhere on
-your PATH.
+site-packages directory, but it won't install the scripts anywhere. Just
+run them from the scripts directory or put them somewhere on your PATH.
 
 
 Simon Forman <forman.simon@gmail.com>
