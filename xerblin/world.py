@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 '''
-This module defines two classes: Serializer and World.
-
-Serializer deals with saving history protocols to a pickle file and World
-deals with interacting with an interpreter in a loop.
+This module defines two classes: Serializer and World. Serializer deals
+with saving history protocols to a pickle file and World deals with
+interacting with an interpreter in a loop.
 
 This module also defines a subclass of World called HistoryListWorld that
 tracks history in a list object, and a couple of very basic views.
@@ -123,7 +122,7 @@ class World:
 
     '''
 
-    def __init__(self, view=nullView, initial=None, save_file=None):
+    def __init__(self, view=nullView, initial=ROOT, save_file=None):
         '''
         Create a World object with the given view function.
 
@@ -139,9 +138,6 @@ class World:
             "_getvalue".
 
         '''
-
-        if initial is None:
-            initial = ROOT
 
         if save_file is None:
             save_file = StringIO.StringIO()
@@ -268,3 +264,70 @@ class Serializer:
         '''
         self.pickler.dump(command)
         self.pickler.dump(resultant_state)
+
+
+# This is a proof-of-concept frame for interacting with
+# a xerblin interpreter.
+if __name__ == "__main__":
+
+    from xerblin.btree import items
+
+    # Create a world with the basic view function.
+    w = HistoryListWorld(view0)
+
+    # For convenience print out the commands in the dictionary at
+    # startup.
+    dictionary = w.getCurrentState()[1]
+    print ' '.join(name for name, value in items(dictionary))
+    print
+
+    # Drop into an event loop.
+    while True:
+        
+        try:
+            # Get a command and split it up.
+            command = raw_input('> ').split()
+        
+        except EOFError:
+            # User is done, quit.
+            break
+        
+        # Run the command, the World object handles all the details for
+        # us.
+        w.step(command)
+
+##
+## Example run:
+##
+## ()
+##
+## NewBranchWord NewLoopWord NewSeqWord add drop dup inscribe listwords
+## lookup mul over pick pickle rebalance sub swap tuck unpickle view
+##
+## > 23 18
+## (18, (23, ()))
+##
+## > over
+## (23, (18, (23, ())))
+##
+## > over
+## (18, (23, (18, (23, ()))))
+##
+## > swap
+## (23, (18, (18, (23, ()))))
+##
+## > sub
+## (-5, (18, (23, ())))
+##
+## > drop
+## (18, (23, ()))
+##
+## > over over sub
+## (5, (18, (23, ())))
+##
+## > drop drop drop
+## ()
+##
+## > 
+##
+##
