@@ -1,7 +1,7 @@
 # Library
 from pickle import dumps, loads
 from xerblin.base import handleSequence, handleLoop, handleBranch
-from xerblin.btree import get, insert, items, fillTree
+from xerblin.btree import get, insert, items, fill_tree
 from xerblin.stack import pop, push, pick_, iterStack
 
 
@@ -217,7 +217,7 @@ def rebalance(interpreter):
     save so that the saved pickle's dictionary is already balanced.
     '''
     stack, dictionary = interpreter
-    dictionary = fillTree((), items(dictionary))
+    dictionary = fill_tree((), items(dictionary))
     return stack, dictionary
 
 

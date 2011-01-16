@@ -81,7 +81,7 @@ These frame "meta" controls are several:
 
 '''
 import pickle, pprint, StringIO
-from xerblin.btree import fillTree, items
+from xerblin.btree import fill_tree, items
 from xerblin.library import words
 from xerblin.base import interpret
 
@@ -106,7 +106,7 @@ def nullView(I):
 # An initial interpreter to use for spawning worlds.  It has an empty
 # stack and whatever commands are defined by default in the library
 # module.
-ROOT = (), fillTree((), words)
+ROOT = (), fill_tree((), words)
 
 
 class World:
