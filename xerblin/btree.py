@@ -63,8 +63,7 @@ def get(node, key):
     if key == node_key:
         return value
 
-    n = lower if key < node_key else higher
-    return get(n, key)
+    return get(lower if key < node_key else higher, key)
 
 
 def delete(node, key):
@@ -100,11 +99,10 @@ def delete(node, key):
     # its key and value and delete it. I only implemented one of these
     # two symmetrical options. Over a lot of deletions this might make
     # the tree more unbalanced.  Oh well.)
-    next = lower
-    while next[3]:
-        next = next[3]
-    key = next[0]
-    value = next[1]
+    node = lower
+    while node[3]:
+        node = node[3]
+    key, value = node[:2]
 
     return key, value, delete(lower, key), higher
 
@@ -132,7 +130,7 @@ def items(node):
         yield kv
 
 
-def _yieldBalanced(sorted_items):
+def _yield_balanced(sorted_items):
     '''
     Recursive generator function to yield the items in a sorted sequence
     in such a way as to fill a btree in a balanced fashion.
@@ -148,29 +146,28 @@ def _yieldBalanced(sorted_items):
     # Yield the middle item.
     yield sorted_items[i]
 
-    # Shortcut in case len(items) == 1
+    # Shortcut in case len(sorted_items) == 1
     if not i:
         return 
 
     # Now recurse on lower and higher halves of the sequence.
-    for low in _yieldBalanced(sorted_items[:i]):
+    for low in _yield_balanced(sorted_items[:i]):
         yield low
-    for high in _yieldBalanced(sorted_items[i+1:]):
+    for high in _yield_balanced(sorted_items[i+1:]):
         yield high
 
 
-def fillTree(node, items):
+def fill_tree(node, items):
     '''
     Add the (key, value) pairs in items to a btree in a balanced way.
 
     You can balance a tree like so:
 
-        tree = fillTree((), items(tree))
+        tree = fill_tree((), items(tree))
 
     This iterates through the tree and returns a new, balanced tree from
     its contents.
     '''
-    for key, value in _yieldBalanced(sorted(items)):
+    for key, value in _yield_balanced(sorted(items)):
         node = insert(node, key, value)
     return node
-
