@@ -24,75 +24,75 @@ BTree that maps string names to four kinds of entries:
     where any of the functions can be themselves SEQ, BRANCH, LOOP, or
     plain functions as described above.
 
-Interpretation is done by means of an applyFunc(interpreter, function)
+Interpretation is done by means of an apply_func(interpreter, function)
 function that knows how to deal with the above combo-word tuples as well
 as library word functions.
 
 The first three functions defined in this module are used to build
 "combo" commands in the UI.  There are corresponding commands in the
 library (NewSeqWord, NewLoopWord, and NewBranchWord) that build tuples
-with these functions as the first item in the tuple.  When applyFunc()
+with these functions as the first item in the tuple.  When apply_func()
 encounters these tuples the initial handler function is used to "run" the
 other functions in the tuple.
 
 The three functions are:
 
-    handleSequence
+    handle_sequence
 
-    handleBranch
+    handle_branch
 
-    handleLoop
+    handle_loop
 
-The applyFunc() function is used by the handlers and the interpret()
+The apply_func() function is used by the handlers and the interpret()
 function to "run" commands on the interpreter.
 '''
 from xerblin.btree import get
 
 
-def _popTOS(I):
+def _pop_TOS(I):
     '''
     Pop the top item off the stack and return it with the
     modified interpreter
     '''
-    # This is a helper function factored out from handleBranch() and
-    # handleLoop() below.
+    # This is a helper function factored out from handle_branch() and
+    # handle_loop() below.
     (TOS, stack), dictionary = I
     return TOS, (stack, dictionary)
 
 
 # These three following functions process the three kinds of combo-words.
 
-def handleSequence(I, seq):
+def handle_sequence(I, seq):
     '''
     Run a sequence and return the modified interpreter.
     '''
     for func in seq[1:]:
-        I = applyFunc(I, func)
+        I = apply_func(I, func)
     return I
 
 
-def handleBranch(I, branch):
+def handle_branch(I, branch):
     '''
     Check TOS and do one thing or another depending.
     '''
-    TOS, I = _popTOS(I)
+    TOS, I = _pop_TOS(I)
     func = branch[(not TOS) + 1] # i.e. True = 1; False = 2
-    return applyFunc(I, func)
+    return apply_func(I, func)
 
 
-def handleLoop(I, loop):
+def handle_loop(I, loop):
     '''
     Check TOS and do body if it's true, repeat.
     '''
     while True:
-        TOS, I = _popTOS(I)
+        TOS, I = _pop_TOS(I)
         if not TOS:
             break
-        I = handleSequence(I, loop)
+        I = handle_sequence(I, loop)
     return I
 
 
-def applyFunc(I, func):
+def apply_func(I, func):
     '''
     Given an interpreter and a function or combo-word tuple, apply the
     function or combo to the interpreter and return the modified
@@ -107,7 +107,7 @@ def applyFunc(I, func):
 
 
 # This is the main point of this module.  It implements the system with
-# the help of the applyFunc() function.
+# the help of the apply_func() function.
 def interpret(I, command):
     '''
     Given an interpreter and a string command, interpret that string on
@@ -133,7 +133,7 @@ def interpret(I, command):
                 else:
                     # Interpret the word.
                     func = get(I[1], word)
-                    I = applyFunc(I, func)
+                    I = apply_func(I, func)
                     continue
 
         # A literal was found, push it onto the stack.
